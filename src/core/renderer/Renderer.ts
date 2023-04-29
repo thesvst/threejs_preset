@@ -1,91 +1,44 @@
-import {
-  AmbientLight,
-  Color,
-  PCFSoftShadowMap,
-  PerspectiveCamera,
-  Scene,
-  Vector3,
-  WebGLRenderer,
-} from 'three';
+import { Camera, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Model } from 'types';
 
+// TODO: Rename to Framer
 export class Renderer {
-  private readonly _camera = new PerspectiveCamera(60, 1920 / 1080, 1.0, 1000);
-  private readonly _scene = new Scene();
-  private readonly _light = new AmbientLight(0xffffff, 0.5);
-  private readonly _renderer = new WebGLRenderer({ antialias: true });
+  private readonly _camera: Camera;
+  private readonly _scene: Scene;
   private _player: Model;
-  private _lastFrameTimeElapsedMS = 0;
+  private readonly _renderer: WebGLRenderer;
+  
   private _orbitControls: null | OrbitControls = null;
+  private _lastFrameTimeElapsedMS = 0;
 
-  constructor(player: Model) {
+  constructor(scene: Scene, camera: PerspectiveCamera, player: Model, renderer: WebGLRenderer) {
+    this._scene = scene;
+    this._camera = camera;
     this._player = player;
+    this._renderer = renderer;
+
     this._Init();
   }
 
+  public UpdateOrbitControls(orbitControls: null | OrbitControls) {
+    this._orbitControls = orbitControls;
+  }
+
   private async _Init() {
-    this._InitPlayer();
-    this._InitOrbitControls();
-
-    this._InitiateRendererSettings();
-    this._InitiateSceneSettings();
-    this._InitiateCameraSettings();
-
     this._RequestAnimationFrame();
-
-    const root = document.getElementById('root');
-    const canvas = document.querySelector('#root canvas');
-    if (root && !canvas) root.appendChild(this._renderer.domElement);
-    window.addEventListener('resize', this._OnWindowResize);
   }
 
-  private _OnWindowResize() {
-    this._camera.aspect = window.innerWidth / window.innerHeight;
-    this._camera.updateProjectionMatrix();
-    this._renderer.setSize(window.innerWidth, window.innerHeight);
-  }
-
-  private _Frame() {
+  private _Frame(timeMS: number) {
     this._orbitControls?.update();
+    this._lastFrameTimeElapsedMS = timeMS - this._lastFrameTimeElapsedMS;
+    this._RequestAnimationFrame();
+    this._renderer.render(this._scene, this._camera);
   }
 
   private _RequestAnimationFrame() {
     requestAnimationFrame((time) => {
-      this._lastFrameTimeElapsedMS = time - this._lastFrameTimeElapsedMS;
-      this._RequestAnimationFrame();
-      this._renderer.render(this._scene, this._camera);
-      this._Frame();
+      this._Frame(time);
     });
-  }
-
-  private _InitOrbitControls() {
-    this._orbitControls = new OrbitControls(this._camera, this._renderer.domElement);
-    this._orbitControls.target.set(0, 0, 0);
-    this._orbitControls.update();
-  }
-
-  private _InitPlayer() {
-    if (this._player) {
-      this._scene.add(this._player.fbx);
-      this._player.fbx.position.set(0, 0, 0);
-      this._camera.lookAt(this._player?.fbx?.position ?? new Vector3());
-    }
-  }
-
-  private _InitiateSceneSettings() {
-    this._scene.add(this._light);
-    this._scene.background = new Color('skyblue');
-  }
-
-  private _InitiateCameraSettings() {
-    this._camera.position.set(0, 0, -40);
-  }
-
-  private _InitiateRendererSettings() {
-    this._renderer.shadowMap.enabled = true;
-    this._renderer.shadowMap.type = PCFSoftShadowMap;
-    this._renderer.setPixelRatio(window.devicePixelRatio);
-    this._renderer.setSize(window.innerWidth, window.innerHeight);
   }
 }
