@@ -1,9 +1,8 @@
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
-import { Model } from './Model';
+import { Model } from './types/Model';
 import { AnimationMixer, LoadingManager } from 'three';
-import { Renderer } from 'core';
+import { Renderer } from './core';
 
-// TODO: In next iteration of refactor, call an instance of Game instead of Rerender
 export class Game {
   _player: Model | null = null;
   _renderer: Renderer | null = null;
