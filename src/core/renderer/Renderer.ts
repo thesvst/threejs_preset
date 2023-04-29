@@ -1,16 +1,12 @@
 import {
   AmbientLight,
-  AnimationMixer,
   Color,
-  Group,
-  LoadingManager,
   PCFSoftShadowMap,
   PerspectiveCamera,
   Scene,
   Vector3,
   WebGLRenderer,
 } from 'three';
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Gui } from '../gui/Gui';
 import { Model } from 'types';
@@ -20,18 +16,17 @@ export class Renderer {
   private readonly _scene = new Scene();
   private readonly _light = new AmbientLight(0xffffff, 0.5);
   private readonly _renderer = new WebGLRenderer({ antialias: true });
-  private _player: Model | null = null;
+  private _player: Model;
   private _lastFrameTimeElapsedMS = 0;
   private _orbitControls: null | OrbitControls = null;
   private _GUI: null | Gui = null;
 
-  constructor(modelFolderPath: string, modelFileName: string) {
-    this._Init(modelFolderPath, modelFileName);
+  constructor(player: Model) {
+    this._player = player;
+    this._Init();
   }
 
-  private async _Init(modelFolderPath: string, modelFileName: string) {
-    const model = await this._LoadModel(modelFolderPath, modelFileName);
-    this._player = model;
+  private async _Init() {
     this._InitPlayer();
     this._InitOrbitControls();
     this._InitGui();
@@ -71,28 +66,6 @@ export class Renderer {
     this._orbitControls = new OrbitControls(this._camera, this._renderer.domElement);
     this._orbitControls.target.set(0, 0, 0);
     this._orbitControls.update();
-  }
-
-  private async _LoadModel(path: string, fileName: string) {
-    const model = {} as Model;
-
-    const loader = new FBXLoader();
-    loader.setPath(path);
-
-    model.fbx = await loader.loadAsync(fileName, (fbx) => fbx);
-    model.fbx.scale.setScalar(0.1);
-    model.fbx.traverse((c) => {
-      c.castShadow = true;
-    });
-
-    if (!model.fbx) throw new Error('Failed to load fbx');
-
-    model.mixer = new AnimationMixer(model.fbx);
-    model.manager = new LoadingManager();
-
-    if (!model.mixer) throw new Error('Failed to load mixer');
-    if (!model.manager) throw new Error('Failed to load manager');
-    return model;
   }
 
   private _InitPlayer() {

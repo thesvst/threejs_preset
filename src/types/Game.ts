@@ -15,8 +15,7 @@ export class Game {
   private async _Init() {
     const model = await this._LoadModel('/src/assets/', 'character.fbx');
     this._player = model;
-    // TODO: In next iteration of refactor, rerender should model as an argument
-    this._renderer = new Renderer('/src/assets/', 'character.fbx');
+    this._renderer = new Renderer(this._player);
   }
 
   private async _LoadModel(path: string, fileName: string) {
