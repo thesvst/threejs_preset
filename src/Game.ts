@@ -11,12 +11,12 @@ import {
   Vector3,
   WebGLRenderer,
 } from 'three';
-import { Gui, Renderer } from './core';
+import { Gui, Framer } from './core';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 export class Game {
   _player: Model | null = null;
-  _Framer: Renderer | null = null;
+  _Framer: Framer | null = null;
   _GUI: { camera: Gui; player: Gui } | null = null;
   _camera: PerspectiveCamera | null = null; // TODO: Pass to renderer as an argument
   _light: AmbientLight | null = null;
@@ -79,7 +79,7 @@ export class Game {
     if (!this._player) throw new Error('Cannot initailize rerender due to missing player!');
     if (!this._renderer) throw new Error('Cannot initialize framer due to missing renderer');
 
-    this._Framer = new Renderer(this._scene, this._camera, this._player, this._renderer);
+    this._Framer = new Framer(this._scene, this._camera, this._player, this._renderer);
   }
 
   private _InitLights() {

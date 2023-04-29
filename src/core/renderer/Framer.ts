@@ -1,9 +1,8 @@
-import { Camera, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from 'three';
+import { Camera, PerspectiveCamera, Scene, WebGLRenderer } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Model } from 'types';
 
-// TODO: Rename to Framer
-export class Renderer {
+export class Framer {
   private readonly _camera: Camera;
   private readonly _scene: Scene;
   private _player: Model;
