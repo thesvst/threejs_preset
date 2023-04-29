@@ -13,8 +13,7 @@ import {
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Gui } from '../gui/Gui';
-
-type Model = { fbx: Group; mixer: AnimationMixer; manager: LoadingManager };
+import { Model } from 'types';
 
 export class Renderer {
   private readonly _camera = new PerspectiveCamera(60, 1920 / 1080, 1.0, 1000);
