@@ -8,7 +8,6 @@ import {
   WebGLRenderer,
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { Gui } from '../gui/Gui';
 import { Model } from 'types';
 
 export class Renderer {
@@ -19,7 +18,6 @@ export class Renderer {
   private _player: Model;
   private _lastFrameTimeElapsedMS = 0;
   private _orbitControls: null | OrbitControls = null;
-  private _GUI: null | Gui = null;
 
   constructor(player: Model) {
     this._player = player;
@@ -29,7 +27,6 @@ export class Renderer {
   private async _Init() {
     this._InitPlayer();
     this._InitOrbitControls();
-    this._InitGui();
 
     this._InitiateRendererSettings();
     this._InitiateSceneSettings();
@@ -90,13 +87,5 @@ export class Renderer {
     this._renderer.shadowMap.type = PCFSoftShadowMap;
     this._renderer.setPixelRatio(window.devicePixelRatio);
     this._renderer.setSize(window.innerWidth, window.innerHeight);
-  }
-
-  private _InitGui() {
-    this._GUI = new Gui();
-    const camPos = { folderName: 'Cam Position', target: this._camera.position, name: 'Position' };
-    const camRot = { folderName: 'Cam Rotation', target: this._camera.rotation, name: 'Rotation' };
-    this._GUI.AddEntityToFolder(camPos);
-    this._GUI.AddEntityToFolder(camRot);
   }
 }
