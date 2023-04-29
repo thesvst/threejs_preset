@@ -24,6 +24,24 @@ export class Game {
   _renderer: WebGLRenderer | null = null;
   _orbitControls: OrbitControls | null = null;
 
+  get playerPosition() {
+    const position = this._player?.fbx.position ?? new Vector3();
+
+    return {
+      asArray: (): [number, number, number] => [position.x, position.y, position.z],
+      asVector3: () => position,
+    };
+  }
+
+  get playerRotation() {
+    const rotation = this._player?.fbx.rotation ?? new Vector3();
+
+    return {
+      asArray: (): [number, number, number] => [rotation.x, rotation.y, rotation.z],
+      asVector3: () => rotation,
+    };
+  }
+
   constructor() {
     this._Init();
   }
@@ -147,7 +165,7 @@ export class Game {
 
     this._scene.add(this._player.fbx);
     this._player.fbx.position.set(0, 0, 0);
-    this._camera.lookAt(this._player?.fbx?.position ?? new Vector3());
+    this._camera.lookAt(...this.playerPosition.asArray());
   }
 
   private _AppendToDOMElement() {
