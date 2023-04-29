@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { App } from './App';
+import { Renderer } from './core';
+
+const RendererRef = new Renderer('/src/assets/', 'character.fbx');
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <App />
+    <div></div>
   </React.StrictMode>,
 );
