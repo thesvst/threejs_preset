@@ -1,20 +1,12 @@
-import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { Model } from './types/Model';
-import {
-  AmbientLight,
-  AnimationMixer,
-  Color,
-  LoadingManager,
-  PCFSoftShadowMap,
-  PerspectiveCamera,
-  Scene,
-  Vector3,
-  WebGLRenderer,
-} from 'three';
+import { AmbientLight, Color, PCFSoftShadowMap, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from 'three';
 import { Gui, Framer } from './core';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { FBXModelLoader } from './core';
 
 export class Game {
+  readonly _FBXModelLoader = new FBXModelLoader();
+
   _player: Model | null = null;
   _Framer: Framer | null = null;
   _GUI: { camera: Gui; player: Gui } | null = null;
@@ -47,7 +39,7 @@ export class Game {
   }
 
   private async _Init() {
-    const model = await this._LoadModel('/src/assets/', 'character.fbx');
+    const model = await this._FBXModelLoader.LoadModel('/src/assets/', 'character.fbx');
     this._player = model;
 
     this._InitScene();
@@ -99,28 +91,6 @@ export class Game {
   private _InitScene() {
     this._scene = new Scene();
     this._scene.background = new Color('skyblue');
-  }
-
-  private async _LoadModel(path: string, fileName: string) {
-    const model = {} as Model;
-
-    const loader = new FBXLoader();
-    loader.setPath(path);
-
-    model.fbx = await loader.loadAsync(fileName, (fbx) => fbx);
-    model.fbx.scale.setScalar(0.1);
-    model.fbx.traverse((c) => {
-      c.castShadow = true;
-    });
-
-    if (!model.fbx) throw new Error('Failed to load fbx');
-
-    model.mixer = new AnimationMixer(model.fbx);
-    model.manager = new LoadingManager();
-
-    if (!model.mixer) throw new Error('Failed to load mixer');
-    if (!model.manager) throw new Error('Failed to load manager');
-    return model;
   }
 
   private _InitGui() {
