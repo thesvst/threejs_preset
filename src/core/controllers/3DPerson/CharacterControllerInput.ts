@@ -25,6 +25,10 @@ export class CharacterControllerInput {
   private readonly _actionsMap: ActionsMap = actionsMapInitialState;
   private _actions = actionsInitialState;
 
+  get actions() {
+    return this._actions;
+  }
+
   private _onKeyUpListener(e: KeyboardEvent) {
     e.preventDefault();
     if (Object.hasOwn(this._actions, this._actionsMap[e.key])) this._actions[this._actionsMap[e.key]] = false;

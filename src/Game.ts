@@ -51,8 +51,9 @@ export class Game {
     if (!this._camera) throw new Error('Cannot initailize rerender due to missing camera!');
     if (!this._player) throw new Error('Cannot initailize rerender due to missing player!');
     if (!this._renderer) throw new Error('Cannot initialize framer due to missing renderer');
+    if (!this._controller) throw new Error('Cannot initialize framer due to missing controller');
 
-    this._Framer = new Framer(this._scene, this._camera, this._player, this._renderer);
+    this._Framer = new Framer(this._scene, this._camera, this._player, this._renderer, this._controller);
   }
 
   private _InitLights() {

@@ -14,7 +14,7 @@ export class FBXModel {
 
     return {
       asArray: (): [number, number, number] => [position.x, position.y, position.z],
-      asVector3: () => position,
+      asVector3: () => new Vector3(position.x, position.y, position.z),
     };
   }
 
@@ -23,7 +23,7 @@ export class FBXModel {
 
     return {
       asArray: (): [number, number, number] => [rotation.x, rotation.y, rotation.z],
-      asQuaternion: () => rotation,
+      asQuaternion: () => new Quaternion(rotation.x, rotation.y, rotation.z, rotation.y),
     };
   }
 
