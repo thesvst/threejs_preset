@@ -1,7 +1,6 @@
 import {
   AmbientLight,
   Color,
-  DoubleSide,
   Mesh,
   MeshStandardMaterial,
   PCFSoftShadowMap,
@@ -83,7 +82,7 @@ export class Game {
     this._scene.background = new Color('skyblue');
 
     const plane = new Mesh(
-      new PlaneGeometry(800, 800, 10, 10),
+      new PlaneGeometry(100, 100, 10, 10),
       new MeshStandardMaterial({ color: 0xfff22f, opacity: 0.5 }),
     );
     plane.rotation.x = -Math.PI / 2;

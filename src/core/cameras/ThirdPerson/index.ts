@@ -23,19 +23,19 @@ export class ThirdPersonCamera {
 
   _CalculateIdealLookat() {
     if (!this._target._fbx) throw new Error('Cannot calculate lookat, fbx is missing');
-    const idealLookat = new Vector3(0, 10, 50);
+    const idealLookAt = new Vector3(0, 10, 50);
 
-    idealLookat.applyQuaternion(this._target.Quaternion.asQuaternion());
-    idealLookat.add(this._target.Position.asVector3());
-    return idealLookat;
+    idealLookAt.applyQuaternion(this._target.Quaternion.asQuaternion());
+    idealLookAt.add(this._target.Position.asVector3());
+    return idealLookAt;
   }
 
   Update() {
     let idealOffset = this._CalculateIdealOffset();
-    let idealLookat = this._CalculateIdealLookat();
+    let idealLookAt = this._CalculateIdealLookat();
 
     this._currentPosition.copy(idealOffset);
-    this._currentLookat.copy(idealLookat);
+    this._currentLookat.copy(idealLookAt);
 
     this._camera.position.copy(this._currentPosition);
     this._camera.lookAt(this._currentLookat);

@@ -12,7 +12,7 @@ export class Framer {
   private readonly _controller: CharacterController;
 
   private _orbitControls: null | OrbitControls = null;
-  private _lastFrameTimeElapsedMS = 0;
+  private _lastFrameTime = new Date().getTime();
 
   constructor(
     scene: Scene,
@@ -38,18 +38,20 @@ export class Framer {
     this._RequestAnimationFrame();
   }
 
-  private _Frame(timeMS: number) {
+  private _Frame(timeFromLastFrame: number) {
+
     this._orbitControls?.update();
-    this._lastFrameTimeElapsedMS = timeMS - this._lastFrameTimeElapsedMS;
-    this._controller.Update(timeMS);
+    this._controller.Update(timeFromLastFrame);
     this._camera.Update();
-    this._RequestAnimationFrame();
     this._renderer.render(this._scene, this._camera._camera);
   }
 
   private _RequestAnimationFrame() {
-    requestAnimationFrame((time) => {
+    this._renderer.setAnimationLoop(() => {
+      const time = (new Date().getTime() - this._lastFrameTime);
       this._Frame(time);
+
+      this._lastFrameTime = new Date().getTime();
     });
   }
 }

@@ -4,10 +4,10 @@ import { FBXModel, FiniteStateMachine } from '../../';
 
 export class CharacterController {
   readonly _decceleration = new Vector3(-0.0005, -0.0001, -5.0);
-  readonly _acceleration = new Vector3(1, 0.25, 0.5);
-  readonly _velocity = new Vector3();
-  readonly _position = new Vector3();
-  readonly _lookAt = new Vector3();
+  readonly _acceleration = new Vector3(1, 0.25, 50);
+  readonly _velocity = new Vector3(0, 0 ,0 );
+  readonly _position = new Vector3(0, 0, 0);
+  readonly _lookAt = new Vector3(0, 0, 0);
   readonly _input = new CharacterControllerInput();
   readonly _stateMachine = new FiniteStateMachine();
   readonly _target: FBXModel;
@@ -18,8 +18,8 @@ export class CharacterController {
     this._camera = camera;
   }
 
-  Update(timeMS: number) {
-    const time = timeMS * 0.001;
+  Update(timeFromLastFrame: number) {
+    const time = timeFromLastFrame * 0.001;
     const velocity = this._velocity;
     if (!this._target._fbx) throw new Error('Target model is not defined');
 
@@ -38,13 +38,13 @@ export class CharacterController {
     if (LEFT) {
       const axis = new Vector3(0, 1, 0);
       const quaternion = new Quaternion().setFromAxisAngle(axis, 4.0 * Math.PI * time * this._acceleration.y);
-      this._target._fbx.quaternion.set(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+      this._target._fbx.quaternion.multiply(quaternion);
     }
 
     if (RIGHT) {
       const axis = new Vector3(0, 1, 0);
       const quaternion = new Quaternion().setFromAxisAngle(axis, 4.0 * -Math.PI * time * this._acceleration.y);
-      this._target._fbx.quaternion.set(quaternion.x, quaternion.y, quaternion.z, quaternion.w);
+      this._target._fbx.quaternion.multiply(quaternion)
     }
 
     this._target._fbx.quaternion.copy(this._target._fbx.quaternion);
@@ -57,6 +57,6 @@ export class CharacterController {
     this._target._fbx.position.add(forward);
     this._target._fbx.position.add(sideways);
 
-    this._velocity.copy(new Vector3());
+    this._velocity.copy(new Vector3(0,0,0));
   }
 }
