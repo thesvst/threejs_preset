@@ -10,20 +10,20 @@ export class FBXModel {
   _animations: { [key: string]: { clip: any; action: AnimationAction } } = {};
 
   get Position() {
-    const position = this._fbx?.position ?? new Vector3();
+    const { x, y, z } = this._fbx?.position ?? new Vector3();
 
     return {
-      asArray: (): [number, number, number] => [position.x, position.y, position.z],
-      asVector3: () => new Vector3(position.x, position.y, position.z),
+      asArray: (): [number, number, number] => [x, y, z],
+      asVector3: () => new Vector3(x, y, z),
     };
   }
 
-  get Rotation() {
-    const rotation = this._fbx?.quaternion ?? new Quaternion();
+  get Quaternion() {
+    const { x, y, z } = this._fbx?.quaternion ?? new Quaternion();
 
     return {
-      asArray: (): [number, number, number] => [rotation.x, rotation.y, rotation.z],
-      asQuaternion: () => new Quaternion(rotation.x, rotation.y, rotation.z, rotation.y),
+      asArray: (): [number, number, number] => [x, y, z],
+      asQuaternion: () => new Quaternion(x, y, z, y),
     };
   }
 

@@ -6,7 +6,7 @@ export class Game {
   _player: FBXModel | null = null;
   _Framer: Framer | null = null;
   _GUI: { camera: Gui; player: Gui } | null = null;
-  _camera: PerspectiveCamera | null = null; // TODO: Pass to renderer as an argument
+  _camera: PerspectiveCamera | null = null;
   _light: AmbientLight | null = null;
   _scene: Scene | null = null;
   _renderer: WebGLRenderer | null = null;
