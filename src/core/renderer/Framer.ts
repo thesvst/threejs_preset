@@ -1,10 +1,11 @@
+import { ThirdPersonCamera } from 'core/cameras';
 import { CharacterController } from 'core/controllers';
 import { FBXModel } from 'core/models';
-import { Camera, PerspectiveCamera, Scene, WebGLRenderer } from 'three';
+import { Scene, WebGLRenderer } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 export class Framer {
-  private readonly _camera: Camera;
+  private readonly _camera: ThirdPersonCamera;
   private readonly _scene: Scene;
   private _player: FBXModel;
   private readonly _renderer: WebGLRenderer;
@@ -15,7 +16,7 @@ export class Framer {
 
   constructor(
     scene: Scene,
-    camera: PerspectiveCamera,
+    camera: ThirdPersonCamera,
     player: FBXModel,
     renderer: WebGLRenderer,
     controller: CharacterController,
@@ -41,8 +42,9 @@ export class Framer {
     this._orbitControls?.update();
     this._lastFrameTimeElapsedMS = timeMS - this._lastFrameTimeElapsedMS;
     this._controller.Update(timeMS);
+    this._camera.Update();
     this._RequestAnimationFrame();
-    this._renderer.render(this._scene, this._camera);
+    this._renderer.render(this._scene, this._camera._camera);
   }
 
   private _RequestAnimationFrame() {

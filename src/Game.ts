@@ -1,12 +1,12 @@
-import { AmbientLight, Color, PCFSoftShadowMap, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from 'three';
+import { AmbientLight, Color, PCFSoftShadowMap, Scene, WebGLRenderer } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { CharacterController, Gui, Framer, FBXModel } from './core';
+import { ThirdPersonCamera, CharacterController, Gui, Framer, FBXModel } from './core';
 
 export class Game {
   _player: FBXModel | null = null;
   _Framer: Framer | null = null;
   _GUI: { camera: Gui; player: Gui } | null = null;
-  _camera: PerspectiveCamera | null = null;
+  _camera: ThirdPersonCamera | null = null;
   _light: AmbientLight | null = null;
   _scene: Scene | null = null;
   _renderer: WebGLRenderer | null = null;
@@ -65,8 +65,10 @@ export class Game {
   }
 
   private _InitCamera() {
-    this._camera = new PerspectiveCamera();
-    this._camera.position.set(0, 0, -40);
+    if (!this._player?._fbx) throw new Error('Cannot initiate camera, player is not defined');
+
+    this._camera = new ThirdPersonCamera(this._player);
+    this._camera._camera.position.set(0, 0, -40);
   }
 
   private _InitScene() {
@@ -78,10 +80,10 @@ export class Game {
     if (this._camera) {
       const gui = { camera: new Gui(), player: new Gui() };
 
-      const camPosition = { folderName: 'Cam Position', target: this._camera.position, name: 'Position' };
-      const camRotation = { folderName: 'Cam Rotation', target: this._camera.rotation, name: 'Rotation' };
-      const playerPosition = { folderName: 'Player Position', target: this._camera.position, name: 'Position' };
-      const playerRotation = { folderName: 'Player Rotation', target: this._camera.position, name: 'Rotation' };
+      const camPosition = { folderName: 'Cam Position', target: this._camera._camera.position, name: 'Position' };
+      const camRotation = { folderName: 'Cam Rotation', target: this._camera._camera.rotation, name: 'Rotation' };
+      const playerPosition = { folderName: 'Player Position', target: this._camera._camera.position, name: 'Position' };
+      const playerRotation = { folderName: 'Player Rotation', target: this._camera._camera.position, name: 'Rotation' };
 
       gui.camera.AddEntityToFolder(camPosition);
       gui.camera.AddEntityToFolder(camRotation);
@@ -96,8 +98,8 @@ export class Game {
     if (!this._camera) throw new Error('Cannot set on resize event, camera is not defined');
     if (!this._renderer) throw new Error('Cannto set on resize event, renderer is not defined');
 
-    this._camera.aspect = window.innerWidth / window.innerHeight;
-    this._camera.updateProjectionMatrix();
+    this._camera._camera.aspect = window.innerWidth / window.innerHeight;
+    this._camera._camera.updateProjectionMatrix();
     this._renderer.setSize(window.innerWidth, window.innerHeight);
   }
 
@@ -105,7 +107,7 @@ export class Game {
     if (!this._camera) throw new Error('Cannot initialize orbit controls, camera is missing');
     if (!this._renderer) throw new Error('Cannot initialize orbit controls, renderer is missing');
 
-    this._orbitControls = new OrbitControls(this._camera, this._renderer.domElement);
+    this._orbitControls = new OrbitControls(this._camera._camera, this._renderer.domElement);
     this._orbitControls.target.set(0, 0, 0);
     this._orbitControls.update();
   }
@@ -117,7 +119,7 @@ export class Game {
 
     this._scene.add(this._player._fbx);
     this._player._fbx.position.set(0, 0, 0);
-    this._camera.lookAt(...this._player.Position.asArray());
+    this._camera._camera.lookAt(...this._player.Position.asArray());
   }
 
   private _AppendToDOMElement() {
@@ -136,7 +138,7 @@ export class Game {
     if (!this._player) throw new Error('Cannot initiate character controller, player is not defined');
     if (!this._camera) throw new Error('Cannot initiate character controller, camera is not defined');
 
-    this._controller = new CharacterController(this._player, this._camera);
+    this._controller = new CharacterController(this._player, this._camera._camera);
     this._controller._input.turnOnKeyboardControls();
   }
 }

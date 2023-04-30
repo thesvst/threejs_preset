@@ -7,7 +7,7 @@ export class CharacterController {
   _stateMachine = new FiniteStateMachine();
   _decceleration = new Vector3(-0.0005, -0.0001, -5.0);
   _acceleration = new Vector3(1, 0.25, 0.5);
-  _velocity = new Vector3(0, 0, 0);
+  _velocity = new Vector3();
   _position = new Vector3();
   _lookAt = new Vector3();
   _target: FBXModel;
