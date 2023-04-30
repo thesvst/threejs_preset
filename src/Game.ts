@@ -1,4 +1,14 @@
-import { AmbientLight, Color, PCFSoftShadowMap, Scene, WebGLRenderer } from 'three';
+import {
+  AmbientLight,
+  Color,
+  DoubleSide,
+  Mesh,
+  MeshStandardMaterial,
+  PCFSoftShadowMap,
+  PlaneGeometry,
+  Scene,
+  WebGLRenderer,
+} from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { ThirdPersonCamera, CharacterController, Gui, Framer, FBXModel } from './core';
 
@@ -47,12 +57,11 @@ export class Game {
   }
 
   private _InitFramer() {
-    if (!this._scene) throw new Error('Cannot initailize rerender due to missing scene!');
-    if (!this._camera) throw new Error('Cannot initailize rerender due to missing camera!');
-    if (!this._player) throw new Error('Cannot initailize rerender due to missing player!');
-    if (!this._renderer) throw new Error('Cannot initialize framer due to missing renderer');
-    if (!this._controller) throw new Error('Cannot initialize framer due to missing controller');
-
+    if (!this._scene) throw new Error('Cannot init framer, scene is not');
+    if (!this._camera) throw new Error('Cannot init framer, scene is not defined');
+    if (!this._player) throw new Error('Cannot init framer, scene is not defined');
+    if (!this._renderer) throw new Error('Cannot init framer, scene is not defined');
+    if (!this._controller) throw new Error('Cannot init framer, scene is not defined');
     this._Framer = new Framer(this._scene, this._camera, this._player, this._renderer, this._controller);
   }
 
@@ -74,6 +83,16 @@ export class Game {
   private _InitScene() {
     this._scene = new Scene();
     this._scene.background = new Color('skyblue');
+
+    const plane = new Mesh(
+      new PlaneGeometry(800, 800, 10, 10),
+      new MeshStandardMaterial({ color: 0xfff22f, opacity: 0.5 }),
+    );
+    plane.material.side = DoubleSide;
+    plane.material.opacity = 0.5;
+
+    plane.rotation.x = -Math.PI / 2;
+    this._scene.add(plane);
   }
 
   private _InitGui() {
