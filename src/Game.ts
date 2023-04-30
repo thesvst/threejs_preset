@@ -1,8 +1,7 @@
 import { Model } from './types/Model';
 import { AmbientLight, Color, PCFSoftShadowMap, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from 'three';
-import { Gui, Framer } from './core';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { FBXModelLoader } from './core';
+import { FBXModelLoader, CharacterController, Gui, Framer } from './core';
 
 export class Game {
   readonly _FBXModelLoader = new FBXModelLoader();
@@ -15,6 +14,7 @@ export class Game {
   _scene: Scene | null = null;
   _renderer: WebGLRenderer | null = null;
   _orbitControls: OrbitControls | null = null;
+  _controller: CharacterController | null = null;
 
   get playerPosition() {
     const position = this._player?.fbx.position ?? new Vector3();
@@ -47,6 +47,7 @@ export class Game {
     this._InitCamera();
     this._InitPlayer();
 
+    this._InitCharacterController();
     this._InitRenderer();
     this._InitFramer();
 
@@ -149,5 +150,10 @@ export class Game {
     } else {
       throw new Error('Cannot append to DOM, root element not found');
     }
+  }
+
+  private _InitCharacterController() {
+    this._controller = new CharacterController();
+    this._controller.turnOnKeyboardControls();
   }
 }
