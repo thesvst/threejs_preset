@@ -62,7 +62,8 @@ export class Game {
     this._InitOrbitControls();
 
     this._AppendToDOMElement();
-    window.addEventListener('resize', this._OnWindowResize);
+
+    window.addEventListener('resize', this._OnWindowResize.bind(this));
   }
 
   private _InitRenderer() {
@@ -174,6 +175,7 @@ export class Game {
     const root = document.getElementById('root');
     if (root) {
       root.appendChild(this._renderer.domElement);
+      this._OnWindowResize();
     } else {
       throw new Error('Cannot append to DOM, root element not found');
     }

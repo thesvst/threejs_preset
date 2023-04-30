@@ -7,7 +7,7 @@ export class Framer {
   private readonly _scene: Scene;
   private _player: Model;
   private readonly _renderer: WebGLRenderer;
-  
+
   private _orbitControls: null | OrbitControls = null;
   private _lastFrameTimeElapsedMS = 0;
 
