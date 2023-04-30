@@ -3,15 +3,15 @@ import { CharacterControllerInput } from './CharacterControllerInput';
 import { FBXModel, FiniteStateMachine } from '../../';
 
 export class CharacterController {
-  _input = new CharacterControllerInput();
-  _stateMachine = new FiniteStateMachine();
-  _decceleration = new Vector3(-0.0005, -0.0001, -5.0);
-  _acceleration = new Vector3(1, 0.25, 0.5);
-  _velocity = new Vector3();
-  _position = new Vector3();
-  _lookAt = new Vector3();
-  _target: FBXModel;
-  _camera: PerspectiveCamera;
+  readonly _decceleration = new Vector3(-0.0005, -0.0001, -5.0);
+  readonly _acceleration = new Vector3(1, 0.25, 0.5);
+  readonly _velocity = new Vector3();
+  readonly _position = new Vector3();
+  readonly _lookAt = new Vector3();
+  readonly _input = new CharacterControllerInput();
+  readonly _stateMachine = new FiniteStateMachine();
+  readonly _target: FBXModel;
+  readonly _camera: PerspectiveCamera;
 
   constructor(target: FBXModel, camera: PerspectiveCamera) {
     this._target = target;
@@ -57,6 +57,6 @@ export class CharacterController {
     this._target._fbx.position.add(forward);
     this._target._fbx.position.add(sideways);
 
-    this._velocity = new Vector3();
+    this._velocity.copy(new Vector3());
   }
 }

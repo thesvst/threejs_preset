@@ -75,9 +75,7 @@ export class Game {
 
   private _InitCamera() {
     if (!this._player?._fbx) throw new Error('Cannot initiate camera, player is not defined');
-
     this._camera = new ThirdPersonCamera(this._player);
-    this._camera._camera.position.set(0, 0, -40);
   }
 
   private _InitScene() {
@@ -88,10 +86,8 @@ export class Game {
       new PlaneGeometry(800, 800, 10, 10),
       new MeshStandardMaterial({ color: 0xfff22f, opacity: 0.5 }),
     );
-    plane.material.side = DoubleSide;
-    plane.material.opacity = 0.5;
-
     plane.rotation.x = -Math.PI / 2;
+
     this._scene.add(plane);
   }
 

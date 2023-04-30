@@ -19,11 +19,11 @@ export class FBXModel {
   }
 
   get Quaternion() {
-    const { x, y, z } = this._fbx?.quaternion ?? new Quaternion();
+    const { x, y, z, w } = this._fbx?.quaternion ?? new Quaternion();
 
     return {
-      asArray: (): [number, number, number] => [x, y, z],
-      asQuaternion: () => new Quaternion(x, y, z, y),
+      asArray: (): [number, number, number, number] => [x, y, z, w],
+      asQuaternion: () => new Quaternion(x, y, z, w),
     };
   }
 
