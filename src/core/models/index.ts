@@ -1,1 +1,1 @@
-export * from './FBXModelLoader';
+export * from './FBXModel';

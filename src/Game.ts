@@ -1,12 +1,9 @@
-import { Model } from './types/Model';
 import { AmbientLight, Color, PCFSoftShadowMap, PerspectiveCamera, Scene, Vector3, WebGLRenderer } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { FBXModelLoader, CharacterController, Gui, Framer } from './core';
+import { CharacterController, Gui, Framer, FBXModel } from './core';
 
 export class Game {
-  readonly _FBXModelLoader = new FBXModelLoader();
-
-  _player: Model | null = null;
+  _player: FBXModel | null = null;
   _Framer: Framer | null = null;
   _GUI: { camera: Gui; player: Gui } | null = null;
   _camera: PerspectiveCamera | null = null; // TODO: Pass to renderer as an argument
@@ -16,30 +13,12 @@ export class Game {
   _orbitControls: OrbitControls | null = null;
   _controller: CharacterController | null = null;
 
-  get playerPosition() {
-    const position = this._player?.fbx.position ?? new Vector3();
-
-    return {
-      asArray: (): [number, number, number] => [position.x, position.y, position.z],
-      asVector3: () => position,
-    };
-  }
-
-  get playerRotation() {
-    const rotation = this._player?.fbx.rotation ?? new Vector3();
-
-    return {
-      asArray: (): [number, number, number] => [rotation.x, rotation.y, rotation.z],
-      asVector3: () => rotation,
-    };
-  }
-
   constructor() {
     this._Init();
   }
 
   private async _Init() {
-    const model = await this._FBXModelLoader.LoadModel('/src/assets/', 'character.fbx');
+    const model = await FBXModel._CreateInstance('src/assets/characters/', 'character.fbx');
     this._player = model;
 
     this._InitScene();
@@ -131,13 +110,13 @@ export class Game {
   }
 
   private _InitPlayer() {
-    if (!this._player) throw new Error('Cannot initialize player, player model is not defined');
+    if (!this._player?._fbx) throw new Error('Cannot initialize player, player model is not defined');
     if (!this._scene) throw new Error('Cannot initialize player, scene is not defined');
     if (!this._camera) throw new Error('Cannot initialize player, camera is not defined');
 
-    this._scene.add(this._player.fbx);
-    this._player.fbx.position.set(0, 0, 0);
-    this._camera.lookAt(...this.playerPosition.asArray());
+    this._scene.add(this._player._fbx);
+    this._player._fbx.position.set(0, 0, 0);
+    this._camera.lookAt(...this._player.Position.asArray());
   }
 
   private _AppendToDOMElement() {
@@ -153,7 +132,10 @@ export class Game {
   }
 
   private _InitCharacterController() {
-    this._controller = new CharacterController();
-    this._controller.turnOnKeyboardControls();
+    if (!this._player) throw new Error('Cannot initiate character controller, player is not defined');
+    if (!this._camera) throw new Error('Cannot initiate character controller, camera is not defined');
+
+    this._controller = new CharacterController(this._player, this._camera);
+    this._controller._input.turnOnKeyboardControls();
   }
 }
