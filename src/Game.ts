@@ -83,7 +83,7 @@ export class Game {
     this._camera = new ThirdPersonCamera(this._player);
   }
 
-  private _InitScene() {
+  private async _InitScene() {
     this._scene = new Scene();
     this._scene.background = new Color('skyblue');
 
@@ -110,6 +110,20 @@ export class Game {
     })
 
     this._scene.add(plane);
+
+
+    // load npcs
+    let lastPos = new Vector3(-50,0,50)
+
+    for (let i = 0; i <= 3; i++) {
+      const model = await FBXModel._CreateInstance('src/assets/characters/', 'character.fbx');
+      lastPos.add(new Vector3(25, 0,0))
+      model._fbx?.position.add(lastPos)
+      const lookAt = new Vector3(0,0,0)
+      model._fbx?.lookAt(lookAt)
+      model.LoadAnimations();
+      this._scene.add(model._fbx!)
+    }
   }
 
   private _InitGui() {
