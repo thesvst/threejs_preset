@@ -1,25 +1,25 @@
 import { Scene, WebGLRenderer } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { ThirdPersonCamera } from '@core/cameras';
-import { FBXModel } from '@core/models';
 import { CharacterController } from '@core/controllers';
+import { PlayerClass } from '@core/entities';
 
-export class Framer {
-  private readonly _camera: ThirdPersonCamera;
+export class Framer<T> {
+  private readonly _camera: ThirdPersonCamera<T>;
   private readonly _scene: Scene;
-  private _player: FBXModel;
+  private _player: PlayerClass<T>;
   private readonly _renderer: WebGLRenderer;
-  private readonly _controller: CharacterController;
+  private readonly _controller: CharacterController<T>;
 
   private _orbitControls: null | OrbitControls = null;
   private _lastFrameTime = new Date().getTime();
 
   constructor(
     scene: Scene,
-    camera: ThirdPersonCamera,
-    player: FBXModel,
+    camera: ThirdPersonCamera<T>,
+    player: PlayerClass<T>,
     renderer: WebGLRenderer,
-    controller: CharacterController,
+    controller: CharacterController<T>,
   ) {
     this._scene = scene;
     this._camera = camera;
@@ -30,16 +30,16 @@ export class Framer {
     this._Init();
   }
 
+  // TODO: Add switch to disable other controls, enable Orbit
   public UpdateOrbitControls(orbitControls: null | OrbitControls) {
     this._orbitControls = orbitControls;
   }
 
-  private async _Init() {
+  private _Init() {
     this._RequestAnimationFrame();
   }
 
   private _Frame(timeFromLastFrame: number) {
-
     this._orbitControls?.update();
     this._controller.Update(timeFromLastFrame);
     this._camera.Update();

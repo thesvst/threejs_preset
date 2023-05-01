@@ -1,23 +1,23 @@
 import { Logger } from '@core/logger';
 
 export class LoaderManagerClass extends Logger {
-  public _CheckIfFolderExists(path: string) {
+  static _CheckIfFolderExists(path: string) {
     try {
       require(path)
     } catch {
-      throw new Error(`Folder doesn't exist`)
+      Logger._Error(`Folder doesn't exist`)
     }
   }
 
-  public  _CheckIfFileExists(path: string) {
+  static _CheckIfFileExists(path: string) {
     try {
       require(path)
     } catch {
-      this._Error(`File doesn't exist`)
+      Logger._Error(`File doesn't exist`)
     }
   }
 
-  public _CheckIfFilesExists(paths: string[]) {
-    paths.map((path) => this._CheckIfFileExists(path))
+  static _CheckIfFilesExists(paths: string[]) {
+    paths.map((path) => LoaderManagerClass._CheckIfFileExists(path))
   }
 }

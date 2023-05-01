@@ -1,31 +1,68 @@
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
-import { LoaderManagerClass } from '@core/loaders';
+// import { LoaderManagerClass } from '@core/loaders';
 import { AnimationAction, AnimationClip, AnimationMixer, Group, LoadingManager } from 'three';
+import { Logger } from '@core/logger';
+import { CharacterFSM } from '@core/states/FiniteStateMachine/CharacterFSM';
+// TODO: Move classes to separated folders
+// TODO: fix dep cycle
+// TODO: fix file accessibility methods (require proper path)
+export class LoaderManagerClass extends Logger {
+  static _CheckIfFolderExists(path: string) {
+    try {
+      // require(path)
+    } catch {
+      Logger._Error(`Folder doesn't exist`)
+    }
+  }
 
-type FBXAnimation<T> = { name: T, fileName: string };
+  static _CheckIfFileExists(path: string) {
+    try {
+      // require(path)
+    } catch {
+      Logger._Error(`File doesn't exist`)
+    }
+  }
 
-class Animations<T> {
-  _folderPath: string;
-  _animations: FBXAnimation<T>[];
+  static _CheckIfFilesExists(paths: string[]) {
+    paths.map((path) => LoaderManagerClass._CheckIfFileExists(path))
+  }
 }
 
-class FBXLoaderManagerClass<T extends string> {
+type FBXMotion<T> = { name: T, fileName: string };
+
+export type FBXModel = { fbx: Group, mixer: AnimationMixer, manager: LoadingManager }
+
+export class FBXMotions<T> {
+  _folderPath: string;
+  _animations: FBXMotion<T>[];
+
+  constructor(folderPath, animations) {
+    this._folderPath = folderPath;
+    this._animations = animations;
+  }
+}
+
+export class FBXLoaderManagerClass<T extends string> extends LoaderManagerClass {
   _fbx: Group;
   _manager: LoadingManager;
   _mixer: AnimationMixer;
-  _loaderManager: LoaderManagerClass;
   _animations: { [key: T]: { clip: AnimationClip; action: AnimationAction } } = {};
-  _motions: Animations<T>;
+  _motions: FBXMotions<T>;
+  _stateMachine = new CharacterFSM(this._animations);
 
-  constructor(model, manager, motions) {
+  constructor(model, motions) {
+    super();
     this._fbx = model.fbx;
     this._manager = model.manager;
     this._mixer = model.mixer
-    this._loaderManager = manager
+
     this._motions = motions;
   }
 
   static async LoadModel(folderPath: string, fileName: string) {
+    this._CheckIfFolderExists(folderPath);
+    this._CheckIfFileExists(`${folderPath}${fileName}`)
+
     const loader = new FBXLoader().setPath(folderPath);
     const fbx = await loader.loadAsync(fileName, (fbx) => fbx)
     const mixer = new AnimationMixer(fbx);
@@ -34,13 +71,16 @@ class FBXLoaderManagerClass<T extends string> {
     return { fbx, mixer, manager }
   }
 
-  private _AnimationOnLoad<T>(FBXAnimation: FBXAnimation<T>, { animations }) {
+  private _AnimationOnLoad<T>(FBXAnimation: FBXMotion<T>, { animations }) {
     const clip = animations[0];
     const action = this._mixer.clipAction(clip);
     this._animations[FBXAnimation.name] = { clip, action };
   }
 
   public async LoadAnimations() {
+    LoaderManagerClass._CheckIfFolderExists(this._motions._folderPath);
+    LoaderManagerClass._CheckIfFilesExists(this._motions._animations.map(({ fileName }) => fileName));
+
     this._mixer = new AnimationMixer(this._fbx);
     const manager = new LoadingManager();
     const loader = new FBXLoader(manager)
@@ -51,17 +91,4 @@ class FBXLoaderManagerClass<T extends string> {
       })
     })
   }
-}
-
-export const FBXLoaderManager = async <T>(modelFolderPath: string, modelFileName: string, motions: Animations<T>) => {
-  const LoaderManager = new LoaderManagerClass();
-  LoaderManager._CheckIfFolderExists(modelFolderPath);
-  LoaderManager._CheckIfFolderExists(motions._folderPath);
-  LoaderManager._CheckIfFilesExists(motions._animations.map((anim) => anim.fileName));
-
-  const FBXModel = await FBXLoaderManagerClass.LoadModel(modelFolderPath, modelFileName);
-  const Instance = new FBXLoaderManagerClass<T>(FBXModel, LoaderManager, motions);
-  await Instance.LoadAnimations()
-
-  return Instance
 }

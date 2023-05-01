@@ -9,34 +9,31 @@ import {
   WebGLRenderer,
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { FBXModel } from '@core/models';
 import { Framer } from '@core/renderer';
 import { Gui } from '@core/gui';
 import { ThirdPersonCamera } from '@core/cameras';
 import { CharacterController } from '@core/controllers';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { Player, PlayerClass } from '@core/entities';
+import { AnimationActionNames } from '@core/states';
 
-export class Game {
-  _player: FBXModel | null = null;
-  _Framer: Framer | null = null;
+// TODO: Replace all manually triggered errors by new logger class
+
+export class Game<T> {
+  _player: PlayerClass<T> | null = null;
+  _Framer: Framer<T> | null = null;
   _GUI: { camera: Gui; player: Gui } | null = null;
-  _camera: ThirdPersonCamera | null = null;
+  _camera: ThirdPersonCamera<T> | null = null;
   _light: AmbientLight | null = null;
   _scene: Scene | null = null;
   _renderer: WebGLRenderer | null = null;
   _orbitControls: OrbitControls | null = null;
-  _controller: CharacterController | null = null;
+  _controller: CharacterController<T> | null = null;
 
-  constructor() {
-    this._Init();
-  }
+  public async Init() {
+    this._player = await Player<AnimationActionNames>();
 
-  private async _Init() {
-    const model = await FBXModel._CreateInstance('src/assets/characters/', 'character.fbx');
-    model.LoadAnimations();
-    this._player = model;
-
-    this._InitScene();
+    await this._InitScene();
     this._InitLights();
     this._InitCamera();
     this._InitPlayer();
@@ -110,20 +107,6 @@ export class Game {
     })
 
     this._scene.add(plane);
-
-
-    // load npcs
-    let lastPos = new Vector3(-50,0,50)
-
-    for (let i = 0; i <= 3; i++) {
-      const model = await FBXModel._CreateInstance('src/assets/characters/', 'character.fbx');
-      lastPos.add(new Vector3(25, 0,0))
-      model._fbx?.position.add(lastPos)
-      const lookAt = new Vector3(0,0,0)
-      model._fbx?.lookAt(lookAt)
-      model.LoadAnimations();
-      this._scene.add(model._fbx!)
-    }
   }
 
   private _InitGui() {

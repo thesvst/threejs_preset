@@ -1,16 +1,16 @@
 import { PerspectiveCamera, Quaternion, Vector3 } from 'three';
-import { FBXModel } from '@core/models';
+import { PlayerClass } from '@core/entities';
 
 import { CharacterControllerInput } from './CharacterControllerInput';
 
-export class CharacterController {
+export class CharacterController<T> {
   readonly _acceleration = new Vector3(1, 0.25, 500);
   readonly _velocity = new Vector3(0, 0 ,0 );
   readonly _input = new CharacterControllerInput();
-  readonly _target: FBXModel;
+  readonly _target: PlayerClass<T>;
   readonly _camera: PerspectiveCamera;
 
-  constructor(target: FBXModel, camera: PerspectiveCamera) {
+  constructor(target: PlayerClass<T>, camera: PerspectiveCamera) {
     this._target = target;
     this._camera = camera;
   }
