@@ -1,0 +1,3 @@
+enum LoggerNames {
+  LoaderManager = 'LoaderManager'
+}

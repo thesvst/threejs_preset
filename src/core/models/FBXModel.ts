@@ -69,9 +69,8 @@ export class FBXModel {
   public LoadAnimations() {
     if (!this._fbx) throw new Error("Cannot load animations, fbx is not defined")
 
-    this._manager = new LoadingManager();
     this._mixer = new AnimationMixer(this._fbx);
-    const loader = new FBXLoader(this._manager);
+    const loader = new FBXLoader(this._manager!);
     this._manager.onLoad = () => {
       this._stateMachine.SetState(AnimationActionNames.IDLE);
     };
