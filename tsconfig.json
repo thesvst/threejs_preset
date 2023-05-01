@@ -10,18 +10,15 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
-    "baseUrl": "./src/",
+    "baseUrl": "./",
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
     "paths": {
-      "@controllers": ["src/controllers"],
-      "@gui": ["src/gui"],
-      "@models": ["src/models"],
-      "@renderer": ["src/renderer"],
-      "@assets": ["src/assets"]
+      "@core": ["src/core"],
+      "@core/*": ["src/core/*"]
     }
   },
   "include": ["src"],

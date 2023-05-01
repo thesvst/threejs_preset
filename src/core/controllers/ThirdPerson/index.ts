@@ -1,6 +1,9 @@
 import { PerspectiveCamera, Quaternion, Vector3 } from 'three';
+
+import { FiniteStateMachine } from '@core/states';
+import { FBXModel } from '@core/models';
+
 import { CharacterControllerInput } from './CharacterControllerInput';
-import { FBXModel, FiniteStateMachine } from '../../';
 
 export class CharacterController {
   readonly _decceleration = new Vector3(-0.0005, -0.0001, -5.0);

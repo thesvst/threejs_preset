@@ -1,5 +1,6 @@
-import { FBXModel } from 'core/models';
 import { PerspectiveCamera, Vector3 } from 'three';
+import { FBXModel } from '@core/models';
+
 
 export class ThirdPersonCamera {
   readonly _currentPosition = new Vector3();

@@ -1,8 +1,8 @@
-import { ThirdPersonCamera } from 'core/cameras';
-import { CharacterController } from 'core/controllers';
-import { FBXModel } from 'core/models';
 import { Scene, WebGLRenderer } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { ThirdPersonCamera } from '@core/cameras';
+import { FBXModel } from '@core/models';
+import { CharacterController } from '@core/controllers';
 
 export class Framer {
   private readonly _camera: ThirdPersonCamera;

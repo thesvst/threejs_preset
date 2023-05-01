@@ -9,7 +9,11 @@ import {
   WebGLRenderer,
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { ThirdPersonCamera, CharacterController, Gui, Framer, FBXModel } from './core';
+import { FBXModel } from '@core/models';
+import { Framer } from '@core/renderer';
+import { Gui } from '@core/gui';
+import { ThirdPersonCamera } from '@core/cameras';
+import { CharacterController } from '@core/controllers';
 
 export class Game {
   _player: FBXModel | null = null;

@@ -1,4 +1,4 @@
-import { AnimationActionNames, DanceState, FiniteStateMachine, IdleState, WalkState } from '../../';
+import { AnimationActionNames, DanceState, FiniteStateMachine, IdleState, WalkState } from '@core/states';
 
 export class CharacterFSM extends FiniteStateMachine {
   constructor() {
