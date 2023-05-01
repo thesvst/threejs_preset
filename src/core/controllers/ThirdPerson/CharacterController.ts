@@ -4,7 +4,7 @@ import { FBXModel } from '@core/models';
 import { CharacterControllerInput } from './CharacterControllerInput';
 
 export class CharacterController {
-  readonly _acceleration = new Vector3(1, 0.25, 350);
+  readonly _acceleration = new Vector3(1, 0.25, 500);
   readonly _velocity = new Vector3(0, 0 ,0 );
   readonly _input = new CharacterControllerInput();
   readonly _target: FBXModel;

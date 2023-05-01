@@ -4,8 +4,8 @@ import {
   Mesh,
   MeshStandardMaterial,
   PCFSoftShadowMap,
-  PlaneGeometry,
-  Scene,
+  PlaneGeometry, RepeatWrapping,
+  Scene, TextureLoader,
   WebGLRenderer,
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
@@ -86,9 +86,15 @@ export class Game {
     this._scene = new Scene();
     this._scene.background = new Color('skyblue');
 
+    const mapSize = 250;
+
+    const groundTexture = new TextureLoader().load('src/assets/grounds/ground.jpg');
+    groundTexture.wrapS = groundTexture.wrapT = RepeatWrapping
+    groundTexture.repeat.setScalar(mapSize / 25)
+
     const plane = new Mesh(
-      new PlaneGeometry(100, 100, 10, 10),
-      new MeshStandardMaterial({ color: 0xfff22f, opacity: 0.5 }),
+      new PlaneGeometry(500, 500, 50, 50),
+      new MeshStandardMaterial({ map: groundTexture }),
     );
     plane.rotation.x = -Math.PI / 2;
 
@@ -137,7 +143,7 @@ export class Game {
     if (!this._camera) throw new Error('Cannot initialize player, camera is not defined');
 
     this._scene.add(this._player._fbx);
-    this._player._fbx.position.set(0, 0, 0);
+    this._player._fbx.position.set(0, -0.02, 0);
     this._camera._camera.lookAt(this._player.Position.asVector3());
   }
 
