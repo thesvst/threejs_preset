@@ -16,9 +16,12 @@ export class CharacterController {
   }
 
   Update(timeFromLastFrame: number) {
+    if (!this._target._fbx) throw new Error('Target model is not defined');
+    if (!this._target._stateMachine) throw new Error ('State machine is not defined');
+    this._target._stateMachine.Update(timeFromLastFrame, this._input);
+
     const time = timeFromLastFrame * 0.001;
     const velocity = this._velocity;
-    if (!this._target._fbx) throw new Error('Target model is not defined');
 
     const acceleration = this._acceleration.clone();
 
@@ -54,6 +57,7 @@ export class CharacterController {
     this._target._fbx.position.add(forward);
     this._target._fbx.position.add(sideways);
 
+    if (this._target._mixer) this._target._mixer.update(time)
     this._velocity.copy(new Vector3(0,0,0));
   }
 }

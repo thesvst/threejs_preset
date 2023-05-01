@@ -69,13 +69,12 @@ export class FBXModel {
   public LoadAnimations() {
     if (!this._fbx) throw new Error("Cannot load animations, fbx is not defined")
 
-    this._mixer = new AnimationMixer(this._fbx);
     this._manager = new LoadingManager();
+    this._mixer = new AnimationMixer(this._fbx);
+    const loader = new FBXLoader(this._manager);
     this._manager.onLoad = () => {
       this._stateMachine.SetState(AnimationActionNames.IDLE);
     };
-    const loader = new FBXLoader(this._manager);
-
 
     const _OnLoad = (animName: AnimationActionNames, anim: Group) => {
       if (!this._mixer) throw new Error('Cannot run OnLoad method, mixer is not defined');

@@ -24,4 +24,10 @@ export class FiniteStateMachine<T, K> {
     this._currentState = state;
     state.Enter(prevState);
   }
+
+  public Update(timeFromLastFrame: number, input) {
+    if (this._currentState) {
+      this._currentState.Update(timeFromLastFrame, input);
+    }
+  }
 }

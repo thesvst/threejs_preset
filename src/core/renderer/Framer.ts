@@ -42,7 +42,6 @@ export class Framer {
 
     this._orbitControls?.update();
     this._controller.Update(timeFromLastFrame);
-    this._player._mixer?.update(timeFromLastFrame)
     this._camera.Update();
     this._renderer.render(this._scene, this._camera._camera);
   }
@@ -51,7 +50,6 @@ export class Framer {
     this._renderer.setAnimationLoop(() => {
       const time = (new Date().getTime() - this._lastFrameTime);
       this._Frame(time);
-
       this._lastFrameTime = new Date().getTime();
     });
   }

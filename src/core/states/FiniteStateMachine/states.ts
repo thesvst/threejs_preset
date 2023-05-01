@@ -17,19 +17,29 @@ export class IdleState extends State {
     return AnimationActionNames.IDLE;
   }
 
-  Enter(prevState: InstanceType<AnimationType>) {
+  public Enter(prevState: InstanceType<AnimationType>) {
     const idleAction = this._parent._animations[AnimationActionNames.IDLE].action;
 
     if (prevState) {
-
-    } else {
+      const prevAction = this._parent._animations[prevState.Name].action;
+      idleAction.time = 0.0;
+      idleAction.enabled = true;
+      idleAction.setEffectiveTimeScale(1.0);
+      idleAction.setEffectiveWeight(1.0);
+      idleAction.crossFadeFrom(prevAction, 0.5, true);
       idleAction.play();
+    } else {
+      idleAction.reset().play();
     }
   }
 
-  Exit() {}
+  public Exit() {}
 
-  Update() {}
+  public Update(_, input) {
+    if (input._actions.FORWARD || input._actions.BACKWARD) {
+     this._parent.SetState(AnimationActionNames.WALK)
+    }
+  }
 }
 
 export class WalkState extends State {
@@ -37,11 +47,27 @@ export class WalkState extends State {
     return AnimationActionNames.WALK;
   }
 
-  Enter(state: InstanceType<AnimationType>) {}
+  public Enter(prevState: InstanceType<AnimationType>) {
+    const currentAction = this._parent._animations[AnimationActionNames.WALK].action;
+    const prevAction = this._parent._animations[prevState.Name].action;
+    if (prevState) {
+      currentAction.enabled = true;
+      currentAction.time = 0.0;
+      currentAction.setEffectiveTimeScale(1.0);
+      currentAction.setEffectiveWeight(1.0);
+      currentAction.crossFadeFrom(prevAction, 0.5, true);
+      currentAction.play();
+    } else {
+      currentAction.play();
+    }
+  }
 
-  Exit() {}
+  public Exit() {}
 
-  Update() {}
+  public Update(_, input) {
+    if (input._actions.FORWARD || input._actions.BACKWARD) return;
+    this._parent.SetState(AnimationActionNames.IDLE);
+  }
 }
 
 export class DanceState extends State {
@@ -49,9 +75,9 @@ export class DanceState extends State {
     return AnimationActionNames.DANCE;
   }
 
-  Enter(state: InstanceType<AnimationType>) {}
+  public Enter(prevState: InstanceType<AnimationType>) {}
 
-  Exit() {}
+  public Exit() {}
 
-  Update() {}
+  public Update() {}
 }
