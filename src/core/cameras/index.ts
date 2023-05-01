@@ -1,1 +1,1 @@
-export * from './ThirdPerson';
+export * from './ThirdPersonCamera/ThirdPersonCamera';
