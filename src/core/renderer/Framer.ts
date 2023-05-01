@@ -42,6 +42,7 @@ export class Framer {
 
     this._orbitControls?.update();
     this._controller.Update(timeFromLastFrame);
+    this._player._mixer?.update(timeFromLastFrame)
     this._camera.Update();
     this._renderer.render(this._scene, this._camera._camera);
   }

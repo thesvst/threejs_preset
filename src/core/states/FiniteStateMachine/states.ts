@@ -1,17 +1,31 @@
 import { AnimationActionNames, AnimationType } from './types';
+import { CharacterFSM } from '@core/states/FiniteStateMachine/CharacterFSM';
 
 class State {
-  get Name() {
-    return 'unknown';
+  _parent: CharacterFSM
+
+  constructor(parent) {
+    this._parent = parent;
   }
 }
 
 export class IdleState extends State {
+  constructor(parent) {
+    super(parent);
+  }
   get Name() {
     return AnimationActionNames.IDLE;
   }
 
-  Enter(state: InstanceType<AnimationType>) {}
+  Enter(prevState: InstanceType<AnimationType>) {
+    const idleAction = this._parent._animations[AnimationActionNames.IDLE].action;
+
+    if (prevState) {
+
+    } else {
+      idleAction.play();
+    }
+  }
 
   Exit() {}
 

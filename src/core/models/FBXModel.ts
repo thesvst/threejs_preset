@@ -1,5 +1,7 @@
 import { AnimationAction, AnimationMixer, Group, LoadingManager, Quaternion, Vector3 } from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
+import { CharacterFSM } from '@core/states/FiniteStateMachine/CharacterFSM';
+import { AnimationActionNames } from '@core/states';
 
 export type Model = { fbx: Group; mixer: AnimationMixer; manager: LoadingManager };
 
@@ -8,6 +10,8 @@ export class FBXModel {
   _mixer: AnimationMixer | null = null;
   _manager: LoadingManager | null = null;
   _animations: { [key: string]: { clip: any; action: AnimationAction } } = {};
+  // TODO: Apply another abstraction
+  _stateMachine = new CharacterFSM(this._animations);
 
   get Position() {
     const { x, y, z } = this._fbx?.position ?? new Vector3();
@@ -63,26 +67,33 @@ export class FBXModel {
 
   // TODO: Find a generic way
   public LoadAnimations() {
-    const loader = new FBXLoader();
+    if (!this._fbx) throw new Error("Cannot load animations, fbx is not defined")
 
-    const _OnLoad = (animName: string, anim: Group) => {
+    this._mixer = new AnimationMixer(this._fbx);
+    this._manager = new LoadingManager();
+    this._manager.onLoad = () => {
+      this._stateMachine.SetState(AnimationActionNames.IDLE);
+    };
+    const loader = new FBXLoader(this._manager);
+
+
+    const _OnLoad = (animName: AnimationActionNames, anim: Group) => {
       if (!this._mixer) throw new Error('Cannot run OnLoad method, mixer is not defined');
 
       const clip = anim.animations[0];
       const action = this._mixer.clipAction(clip);
-
       this._animations[animName] = { clip, action };
     };
 
     loader.setPath('src/assets/animations/');
-    loader.load('walk.fbx', (a) => {
-      _OnLoad('walk', a);
+    loader.load('walk.fbx', (animation) => {
+      _OnLoad(AnimationActionNames.WALK, animation);
     });
-    loader.load('dance.fbx', (a) => {
-      _OnLoad('dance', a);
+    loader.load('dance.fbx', (animation) => {
+      _OnLoad(AnimationActionNames.DANCE, animation);
     });
-    loader.load('idle.fbx', (a) => {
-      _OnLoad('idle', a);
+    loader.load('idle.fbx', (animation) => {
+      _OnLoad(AnimationActionNames.IDLE, animation);
     });
   }
 }

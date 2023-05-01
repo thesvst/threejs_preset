@@ -1,19 +1,17 @@
-import { AnimationActionNames, AnimationType } from './types';
-
-export class FiniteStateMachine {
-  _states: Record<AnimationActionNames, AnimationType>;
-  _currentState: InstanceType<AnimationType> | null = null;
+export class FiniteStateMachine<T, K> {
+  _states: Record<T, K>;
+  _currentState: InstanceType<K> | null = null;
 
   constructor() {
-    this._states = {} as Record<AnimationActionNames, AnimationType>;
+    this._states = {} as Record<T, K>;
     this._currentState = null;
   }
 
-  public AddState(name: AnimationActionNames, type: AnimationType) {
+  public AddState(name: T, type: K) {
     this._states[name] = type;
   }
 
-  public SetState(name: AnimationActionNames) {
+  public SetState(name: T) {
     const prevState = this._currentState;
 
     if (prevState) {
@@ -21,11 +19,9 @@ export class FiniteStateMachine {
       prevState.Exit();
     }
 
-    const state = new this._states[name](); // TODO: check this context
+    const state = new this._states[name](this);
+
     this._currentState = state;
-    if (prevState) {
-      // TODO: Check if won't be any coflicts
-      state.Enter(prevState);
-    }
+    state.Enter(prevState);
   }
 }

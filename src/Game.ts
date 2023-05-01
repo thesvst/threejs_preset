@@ -32,6 +32,7 @@ export class Game {
 
   private async _Init() {
     const model = await FBXModel._CreateInstance('src/assets/characters/', 'character.fbx');
+    model.LoadAnimations();
     this._player = model;
 
     this._InitScene();
@@ -137,7 +138,7 @@ export class Game {
 
     this._scene.add(this._player._fbx);
     this._player._fbx.position.set(0, 0, 0);
-    this._camera._camera.lookAt(...this._player.Position.asArray());
+    this._camera._camera.lookAt(this._player.Position.asVector3());
   }
 
   private _AppendToDOMElement() {
