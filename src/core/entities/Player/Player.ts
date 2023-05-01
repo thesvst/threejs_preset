@@ -4,8 +4,8 @@ import { FBXModel } from '@core/loaders/FBXLoaderManager/FBXLoaderManager';
 import { AnimationActionNames } from '@core/states';
 
 const playerMotions = [
-  { name: AnimationActionNames.DANCE, fileName: 'dance.fbx' },
   { name: AnimationActionNames.IDLE, fileName: 'idle.fbx' },
+  { name: AnimationActionNames.DANCE, fileName: 'dance.fbx' },
   { name: AnimationActionNames.WALK, fileName: 'walk.fbx' }
 ]
 const characterFolderPath = 'src/assets/characters/';

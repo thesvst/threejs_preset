@@ -1,5 +1,4 @@
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
-// import { LoaderManagerClass } from '@core/loaders';
 import { AnimationAction, AnimationClip, AnimationMixer, Group, LoadingManager } from 'three';
 import { Logger } from '@core/logger';
 import { CharacterFSM } from '@core/states/FiniteStateMachine/CharacterFSM';
@@ -82,13 +81,15 @@ export class FBXLoaderManagerClass<T extends string> extends LoaderManagerClass 
     LoaderManagerClass._CheckIfFilesExists(this._motions._animations.map(({ fileName }) => fileName));
 
     this._mixer = new AnimationMixer(this._fbx);
-    const manager = new LoadingManager();
-    const loader = new FBXLoader(manager)
+    const loader = new FBXLoader(this._manager)
     loader.setPath(this._motions._folderPath)
     this._motions._animations.map((FBXAnimation) => {
       loader.load(FBXAnimation.fileName, (animation) => {
         this._AnimationOnLoad<T>(FBXAnimation, animation)
       })
     })
+    this._manager.onLoad = () => {
+      this._stateMachine.SetState(this._motions._animations[0].name);
+    };
   }
 }
