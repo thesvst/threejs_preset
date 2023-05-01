@@ -5,7 +5,7 @@ import {
   MeshStandardMaterial,
   PCFSoftShadowMap,
   PlaneGeometry, RepeatWrapping,
-  Scene, TextureLoader,
+  Scene, TextureLoader, Vector3,
   WebGLRenderer,
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
@@ -14,6 +14,7 @@ import { Framer } from '@core/renderer';
 import { Gui } from '@core/gui';
 import { ThirdPersonCamera } from '@core/cameras';
 import { CharacterController } from '@core/controllers';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 export class Game {
   _player: FBXModel | null = null;
@@ -97,6 +98,16 @@ export class Game {
       new MeshStandardMaterial({ map: groundTexture }),
     );
     plane.rotation.x = -Math.PI / 2;
+
+    const DJKitLoader = new GLTFLoader();
+    DJKitLoader.load('src/assets/objects/djset.glb', (gltf) => {
+      const obj = gltf.scene;
+      obj.scale.setScalar(12)
+      obj.position.set(-40,-15, 85)
+      obj.rotation.set(obj.rotation.x, Math.PI * -1, obj.rotation.z)
+
+      this._scene?.add(gltf.scene)
+    })
 
     this._scene.add(plane);
   }
