@@ -4,8 +4,11 @@ import {
   Mesh,
   MeshStandardMaterial,
   PCFSoftShadowMap,
-  PlaneGeometry, RepeatWrapping,
-  Scene, TextureLoader, Vector3,
+  PlaneGeometry,
+  RepeatWrapping,
+  Scene,
+  TextureLoader,
+  Vector3,
   WebGLRenderer,
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
@@ -14,13 +17,14 @@ import { Gui } from '@core/gui';
 import { ThirdPersonCamera } from '@core/cameras';
 import { CharacterController } from '@core/controllers';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { Player, PlayerClass } from '@core/entities';
+import { NPC, NPCClass, Player, PlayerClass } from '@core/entities';
 import { AnimationActionNames } from '@core/states';
 
 // TODO: Replace all manually triggered errors by new logger class
 
 export class Game<T> {
   _player: PlayerClass<T> | null = null;
+  _NPC: NPCClass<T>[] = [];
   _Framer: Framer<T> | null = null;
   _GUI: { camera: Gui; player: Gui } | null = null;
   _camera: ThirdPersonCamera<T> | null = null;
@@ -30,10 +34,25 @@ export class Game<T> {
   _orbitControls: OrbitControls | null = null;
   _controller: CharacterController<T> | null = null;
 
+  private async _InitializeNPCs() {
+    [
+      new Vector3(-25, 0,50),
+      new Vector3(0, 0,50),
+      new Vector3(25, 0,50)
+    ].map(async (vector) => {
+      const npc = await NPC<AnimationActionNames>();
+      this._NPC.push(npc)
+      npc._fbx.position.copy(vector)
+      npc._fbx.lookAt(0,0,0)
+      this._scene?.add(npc._fbx)
+    })
+  }
+
   public async Init() {
     this._player = await Player<AnimationActionNames>();
-
     await this._InitScene();
+    await this._InitializeNPCs()
+
     this._InitLights();
     this._InitCamera();
     this._InitPlayer();
