@@ -13,7 +13,6 @@ export class FiniteStateMachine<T extends string, K> {
 
   public SetState(name: T) {
     const prevState = this._currentState;
-    console.log('curr', this._currentState)
 
     if (prevState) {
       if (prevState.Name == name) return;

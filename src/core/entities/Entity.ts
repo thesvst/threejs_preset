@@ -1,8 +1,9 @@
 import { FBXLoaderManagerClass } from '@core/loaders';
 import { Vector3, Quaternion } from 'three';
 import { MotionManager } from '@core/motions';
+import { CharacterControllerInput } from '@core/controllers/ThirdPerson/CharacterControllerInput';
 
-export class Entity<T, K> extends MotionManager<T, K>{
+export class Entity<T extends string, K> extends MotionManager<T, K>{
   _target: FBXLoaderManagerClass<T, K>;
 
   constructor(model: FBXLoaderManagerClass<T, K>) {
@@ -38,7 +39,7 @@ export class Entity<T, K> extends MotionManager<T, K>{
     this.SetState(name)
   }
 
-  public UpdateMotionState(timeFromLastFrame: number, input) {
+  public UpdateMotionState(timeFromLastFrame: number, input: CharacterControllerInput) {
     this.Update(timeFromLastFrame, input)
   }
 }
