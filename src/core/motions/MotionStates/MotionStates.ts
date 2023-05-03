@@ -1,4 +1,4 @@
-import { AnimationActionNames, AnimationType } from './types';
+import { AnimationActionNames, AnimationType } from '../../states/FiniteStateMachine/types';
 import { CharacterFSM } from '@core/states/FiniteStateMachine/CharacterFSM';
 // TODO: Abstract class for characterstate machine/npcstate machine
 class State {

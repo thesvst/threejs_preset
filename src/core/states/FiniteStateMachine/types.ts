@@ -1,4 +1,4 @@
-import { DanceState, IdleState, WalkState } from './states';
+import { DanceState, IdleState, WalkState } from '../../motions/MotionStates/MotionStates';
 
 export enum AnimationActionNames {
   IDLE = 'IDLE',

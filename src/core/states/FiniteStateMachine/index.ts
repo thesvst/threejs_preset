@@ -1,3 +1,3 @@
 export * from './types';
-export * from './states';
+export * from '../../motions/MotionStates/MotionStates';
 export * from './FiniteStateMachine';
