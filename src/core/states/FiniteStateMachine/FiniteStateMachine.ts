@@ -2,6 +2,7 @@ import { Motions, MotionState } from '@core/motions/MotionStates';
 import { FBXLoaderManagerClass } from '@core/loaders';
 import { EntityControllerInput } from '@core/controllers';
 
+// TODO: Methods should not be public
 export class FiniteStateMachine {
   _states: Partial<Record<Motions, MotionState>> = {};
   _currentState: InstanceType<MotionState> | null;

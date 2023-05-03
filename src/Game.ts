@@ -17,6 +17,7 @@ import { Gui } from '@core/gui';
 import { ThirdPersonCamera } from '@core/cameras';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { NPC, NPCClass, Player, PlayerClass } from '@core/entities';
+import { Motions } from '@core/motions/MotionStates';
 
 // TODO: Replace all manually triggered errors by new logger class
 export class Game {
@@ -163,6 +164,7 @@ export class Game {
       this._NPCs.push(npc)
       npc._target._fbx.position.copy(vector)
       npc._target._fbx.lookAt(0,0,0)
+      npc.SetMotionState(Motions.DANCE)
       this._scene?.add(npc._target._fbx)
     })
   }

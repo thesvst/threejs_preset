@@ -85,7 +85,10 @@ export class DanceState extends MotionStateClass {
     super(parent, Motions.DANCE);
   }
 
-  public Enter(prevState: InstanceType<MotionState>) {}
+  public Enter(prevState: InstanceType<MotionState>) {
+    const currentAction = this._parent._target._animationsManager[this._name].action;
+    currentAction.reset().play();
+  }
 
   public Exit() {}
 
