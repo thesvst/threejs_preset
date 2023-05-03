@@ -83,9 +83,7 @@ export class Game {
   private async _InitScene() {
     this._scene = new Scene();
     this._scene.background = new Color('skyblue');
-
     const mapSize = 250;
-
     const groundTexture = new TextureLoader().load('src/assets/grounds/ground.jpg');
     groundTexture.wrapS = groundTexture.wrapT = RepeatWrapping
     groundTexture.repeat.setScalar(mapSize / 25)
@@ -96,11 +94,36 @@ export class Game {
     );
     plane.rotation.x = -Math.PI / 2;
 
+    const wall1 = new Mesh(
+      new PlaneGeometry(300, 150, 50, 50),
+      new MeshStandardMaterial({ color: new Color('#000') }),
+    );
+
+    const wall2 = wall1.clone();
+    const wall3 = wall1.clone();
+    const wall4 = wall1.clone();
+    const wall5 = wall1.clone();
+    wall1.position.set(-35,0,0)
+    wall1.rotation.y = Math.PI * 0.5;
+    wall2.position.set(35,0,0)
+    wall2.rotation.y = Math.PI * -0.5;
+    wall3.position.set(35,0,150)
+    wall3.rotation.y = Math.PI * -1;
+    wall4.position.set(0,50,0)
+    wall4.rotation.x = Math.PI * 0.5;
+    wall5.position.z = -25;
+
+    this._scene.add(wall1);
+    this._scene.add(wall2);
+    this._scene.add(wall3);
+    this._scene.add(wall4);
+    this._scene.add(wall5);
+
     const DJKitLoader = new GLTFLoader();
     DJKitLoader.load('src/assets/objects/djset.glb', (gltf) => {
       const obj = gltf.scene;
       obj.scale.setScalar(12)
-      obj.position.set(-40,-15, 85)
+      obj.position.set(-40,-15, 65)
       obj.rotation.set(obj.rotation.x, Math.PI * -1, obj.rotation.z)
 
       this._scene?.add(gltf.scene)
