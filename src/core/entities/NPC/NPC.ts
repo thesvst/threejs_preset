@@ -8,10 +8,10 @@ import {
   playerMotions,
 } from '../../../Game.consts';
 
-export class NPCClass<T, K> extends Entity<T, K> {
+export class NPCClass extends Entity {
   _name = 'thesvst';
 
-  constructor(loaderManager: FBXLoaderManagerClass<T, K>) {
+  constructor(loaderManager: FBXLoaderManagerClass) {
     super(loaderManager);
     this._target._fbx.scale.set(0.1,0.1,0.1)
   }

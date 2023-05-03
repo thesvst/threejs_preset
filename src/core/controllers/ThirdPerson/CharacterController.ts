@@ -3,14 +3,14 @@ import { Entity, PlayerClass } from '@core/entities';
 
 import { CharacterControllerInput } from './CharacterControllerInput';
 
-export class CharacterController<T extends string, K> {
+export class CharacterController {
   readonly _acceleration = new Vector3(1, 0.25, 500);
   readonly _velocity = new Vector3(0, 0 ,0 );
   readonly _input = new CharacterControllerInput();
-  readonly _entity: Entity<T, K>;
+  readonly _entity: Entity;
   readonly _camera: PerspectiveCamera;
 
-  constructor(target: PlayerClass<T, K>, camera: PerspectiveCamera) {
+  constructor(target: PlayerClass, camera: PerspectiveCamera) {
     this._entity = target;
     this._camera = camera;
   }

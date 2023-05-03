@@ -20,20 +20,20 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { NPC, NPCClass, Player, PlayerClass } from '@core/entities';
 
 // TODO: Replace all manually triggered errors by new logger class
-export class Game<T extends string, K> {
-  _player: PlayerClass<T, K> | null = null;
-  _NPC: NPCClass<T, K>[] = [];
-  _Framer: Framer<T> | null = null;
+export class Game {
+  _player: PlayerClass | null = null;
+  _NPC: NPCClass[] = [];
+  _Framer: Framer | null = null;
   _GUI: { camera: Gui; player: Gui } | null = null;
-  _camera: ThirdPersonCamera<T, K> | null = null;
+  _camera: ThirdPersonCamera | null = null;
   _light: AmbientLight | null = null;
   _scene: Scene | null = null;
   _renderer: WebGLRenderer | null = null;
   _orbitControls: OrbitControls | null = null;
-  _controller: CharacterController<T, K> | null = null;
+  _controller: CharacterController | null = null;
 
   public async Init() {
-    this._player = await Player<T, K>();
+    this._player = await Player();
     await this._InitScene();
     await this._InitializeNPCs()
 
@@ -163,7 +163,7 @@ export class Game<T extends string, K> {
       new Vector3(0, 0,50),
       new Vector3(25, 0,50)
     ].map(async (vector) => {
-      const npc = await NPC<T, K>();
+      const npc = await NPC();
       this._NPC.push(npc)
       npc._target._fbx.position.copy(vector)
       npc._target._fbx.lookAt(0,0,0)

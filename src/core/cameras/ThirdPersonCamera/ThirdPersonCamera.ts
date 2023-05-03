@@ -1,14 +1,14 @@
 import { PerspectiveCamera, Vector3 } from 'three';
 import { Entity } from '@core/entities';
 
-export class ThirdPersonCamera<T, K> {
+export class ThirdPersonCamera {
   readonly _currentPosition = new Vector3(0,0,0);
   readonly _currentLookAt = new Vector3(0,0,0);
 
-  _target: Entity<T, K>;
+  _target: Entity;
   _camera = new PerspectiveCamera();
 
-  constructor(target: Entity<T, K>) {
+  constructor(target: Entity) {
     this._target = target;
   }
 

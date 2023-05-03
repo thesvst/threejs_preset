@@ -4,22 +4,22 @@ import { ThirdPersonCamera } from '@core/cameras';
 import { CharacterController } from '@core/controllers';
 import { PlayerClass } from '@core/entities';
 
-export class Framer<T> {
-  private readonly _camera: ThirdPersonCamera<T>;
+export class Framer {
+  private readonly _camera: ThirdPersonCamera;
   private readonly _scene: Scene;
-  private _player: PlayerClass<T>;
+  private _player: PlayerClass;
   private readonly _renderer: WebGLRenderer;
-  private readonly _controller: CharacterController<T>;
+  private readonly _controller: CharacterController;
 
   private _orbitControls: null | OrbitControls = null;
   private _lastFrameTime = new Date().getTime();
 
   constructor(
     scene: Scene,
-    camera: ThirdPersonCamera<T>,
-    player: PlayerClass<T>,
+    camera: ThirdPersonCamera,
+    player: PlayerClass,
     renderer: WebGLRenderer,
-    controller: CharacterController<T>,
+    controller: CharacterController,
   ) {
     this._scene = scene;
     this._camera = camera;
