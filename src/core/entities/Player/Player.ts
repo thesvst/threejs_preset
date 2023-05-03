@@ -21,8 +21,8 @@ export class PlayerClass<T> extends Entity<T> {
 
 export const Player = async <T>() => {
   const FBXModelInstance = await FBXLoaderManagerClass.LoadModel(characterFolderPath, characterFileName);
-  const FBXMotionsInstance =  new MotionManager<T>(characterMotionsFolderPath, playerMotions);
-  const PlayerInstance = new PlayerClass(FBXModelInstance, FBXMotionsInstance)
+  const MotionManagerInstance =  new MotionManager<T>(characterMotionsFolderPath, playerMotions);
+  const PlayerInstance = new PlayerClass(FBXModelInstance, MotionManagerInstance)
   await PlayerInstance.LoadAnimations();
 
   return PlayerInstance;

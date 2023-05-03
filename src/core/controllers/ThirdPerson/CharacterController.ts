@@ -17,8 +17,8 @@ export class CharacterController<T> {
 
   Update(timeFromLastFrame: number) {
     if (!this._target._fbx) throw new Error('Target model is not defined');
-    if (!this._target._stateMachine) throw new Error ('State machine is not defined');
-    this._target._stateMachine.Update(timeFromLastFrame, this._input);
+    if (!this._target._motionManager) throw new Error ('Motion manager is not defined');
+    this._target._motionManager.Update(timeFromLastFrame, this._input);
 
     const time = timeFromLastFrame * 0.001;
     const velocity = this._velocity;

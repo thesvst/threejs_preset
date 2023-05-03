@@ -30,15 +30,16 @@ export class LoaderManagerClass extends Logger {
 
 export type FBXModel = { fbx: Group, mixer: AnimationMixer, manager: LoadingManager }
 
-export class FBXLoaderManagerClass<T extends string> extends LoaderManagerClass {
+export class FBXLoaderManagerClass<T extends string, K> extends LoaderManagerClass {
   _fbx: Group;
   _manager: LoadingManager;
   _mixer: AnimationMixer;
-  _animations: { [key: T]: { clip: AnimationClip; action: AnimationAction } } = {};
-  _motionManager: MotionManager<T>;
-  _stateMachine = new CharacterFSM(this._animations);
+  _animations: {
+    [key: string]: { clip: AnimationClip; action: AnimationAction }
+  } = {};
+  _motionManager: MotionManager<T, K>;
 
-  constructor(model: FBXModel, motions: MotionManager<T>) {
+  constructor(model: FBXModel, motions: MotionManager<T, K>) {
     super();
     this._fbx = model.fbx;
     this._manager = model.manager;
@@ -67,18 +68,19 @@ export class FBXLoaderManagerClass<T extends string> extends LoaderManagerClass 
 
   public async LoadAnimations() {
     LoaderManagerClass._CheckIfFolderExists(this._motionManager._folderPath);
-    LoaderManagerClass._CheckIfFilesExists(this._motionManager._motions.map(({ fileName }) => fileName));
+    LoaderManagerClass._CheckIfFilesExists(this._motionManager._motions.map((motion) => motion.name));
 
     this._mixer = new AnimationMixer(this._fbx);
     const loader = new FBXLoader(this._manager)
     loader.setPath(this._motionManager._folderPath)
-    this._motionManager._motions.map((FBXAnimation) => {
-      loader.load(FBXAnimation.fileName, (animation) => {
-        this._AnimationOnLoad<T>(FBXAnimation, animation)
+    this._motionManager._motions.map((motion) => {
+      loader.load(motion.fileName, (animation) => {
+        this._AnimationOnLoad<T>(motion, animation)
       })
     })
+
     this._manager.onLoad = () => {
-      this._stateMachine.SetState(this._motionManager._motions[0].name);
+      // this._motionManager.SetState(this._motionManager._motions[0].name);
     };
   }
 }
