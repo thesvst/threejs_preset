@@ -1,7 +1,7 @@
 import { FiniteStateMachine } from '@core/states';
 import { FBXLoaderManagerClass } from '@core/loaders';
 import { Motions, MotionState } from '@core/motions/MotionStates';
-import { CharacterControllerInput } from '@core/controllers/ThirdPerson/CharacterControllerInput';
+import { EntityControllerInput } from '@core/controllers';
 
 export type Motion = {
   name: Motions,
@@ -37,7 +37,7 @@ export class MotionManager extends FiniteStateMachine {
     this.SetState(name)
   }
 
-  protected UpdateMotionState(timeFromLastFrame: number, input: CharacterControllerInput) {
+  protected UpdateMotionState(timeFromLastFrame: number, input: EntityControllerInput) {
     this.Update(timeFromLastFrame, input)
   }
 }

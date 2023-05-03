@@ -1,3 +1,5 @@
+import { EntityControllerInputClass } from '@core/controllers/EntityControllerInputClass';
+
 enum Actions {
   FORWARD = 'FORWARD',
   BACKWARD = 'BACKWARD',
@@ -14,16 +16,8 @@ const actionsMapInitialState = {
   d: Actions.RIGHT,
 };
 
-const actionsInitialState = {
-  [Actions.FORWARD]: false,
-  [Actions.BACKWARD]: false,
-  [Actions.LEFT]: false,
-  [Actions.RIGHT]: false,
-};
-
-export class CharacterControllerInput {
-  readonly _actionsMap: ActionsMap = actionsMapInitialState;
-  private _actions = actionsInitialState;
+export class KeyboardControllerInput extends EntityControllerInputClass {
+  private readonly _actionsMap: ActionsMap = actionsMapInitialState;
 
   get actions() {
     return this._actions;

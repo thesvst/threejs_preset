@@ -1,18 +1,19 @@
 import { PerspectiveCamera, Quaternion, Vector3 } from 'three';
-import { Entity, PlayerClass } from '@core/entities';
+import { Entity } from '@core/entities';
+import { AIControllerInput } from '@core/controllers/AI';
+import { KeyboardControllerInput } from '@core/controllers/Keyboard';
 
-import { CharacterControllerInput } from './CharacterControllerInput';
+export type EntityControllerInput = AIControllerInput | KeyboardControllerInput
 
-export class CharacterController {
+export class EntityController {
   readonly _acceleration = new Vector3(1, 0.25, 500);
   readonly _velocity = new Vector3(0, 0 ,0 );
-  readonly _input = new CharacterControllerInput();
+  readonly _input: EntityControllerInput;
   readonly _entity: Entity;
-  readonly _camera: PerspectiveCamera;
 
-  constructor(target: PlayerClass, camera: PerspectiveCamera) {
+  constructor(target: Entity, input: EntityControllerInput) {
     this._entity = target;
-    this._camera = camera;
+    this._input = input;
   }
 
   Update(timeFromLastFrame: number) {

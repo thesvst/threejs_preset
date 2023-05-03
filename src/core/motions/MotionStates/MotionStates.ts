@@ -1,5 +1,5 @@
-import { CharacterControllerInput } from '@core/controllers/ThirdPerson/CharacterControllerInput';
 import { FiniteStateMachine } from '@core/states';
+import { EntityControllerInput } from '@core/controllers';
 
 export enum Motions {
   IDLE = 'IDLE',
@@ -45,7 +45,7 @@ export class IdleState extends MotionStateClass {
 
   public Exit() {}
 
-  public Update(time: number, input: CharacterControllerInput) {
+  public Update(time: number, input: EntityControllerInput) {
     if (input.actions.FORWARD || input.actions.BACKWARD) {
      this._parent.SetState(Motions.WALK)
     }
@@ -74,7 +74,7 @@ export class WalkState extends MotionStateClass {
 
   public Exit() {}
 
-  public Update(_: number, input: CharacterControllerInput) {
+  public Update(_: number, input: EntityControllerInput) {
     if (input.actions.FORWARD || input.actions.BACKWARD) return;
     this._parent.SetState(Motions.IDLE);
   }
@@ -89,5 +89,5 @@ export class DanceState extends MotionStateClass {
 
   public Exit() {}
 
-  public Update(time: number, input: CharacterControllerInput) {}
+  public Update(time: number, input: EntityControllerInput) {}
 }

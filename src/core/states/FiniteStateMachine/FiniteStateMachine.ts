@@ -1,6 +1,6 @@
 import { Motions, MotionState } from '@core/motions/MotionStates';
-import { CharacterControllerInput } from '@core/controllers/ThirdPerson/CharacterControllerInput';
 import { FBXLoaderManagerClass } from '@core/loaders';
+import { EntityControllerInput } from '@core/controllers';
 
 export class FiniteStateMachine {
   _states: Partial<Record<Motions, MotionState>> = {};
@@ -37,7 +37,7 @@ export class FiniteStateMachine {
     }
   }
 
-  public Update(timeFromLastFrame: number, input: CharacterControllerInput) {
+  public Update(timeFromLastFrame: number, input: EntityControllerInput) {
     if (this._currentState) {
       this._currentState.Update(timeFromLastFrame, input);
     }

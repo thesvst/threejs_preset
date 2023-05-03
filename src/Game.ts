@@ -15,7 +15,6 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { Framer } from '@core/renderer';
 import { Gui } from '@core/gui';
 import { ThirdPersonCamera } from '@core/cameras';
-import { CharacterController } from '@core/controllers';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { NPC, NPCClass, Player, PlayerClass } from '@core/entities';
 
@@ -30,7 +29,6 @@ export class Game {
   _scene: Scene | null = null;
   _renderer: WebGLRenderer | null = null;
   _orbitControls: OrbitControls | null = null;
-  _controller: CharacterController | null = null;
 
   public async Init() {
     this._player = await Player();
@@ -41,7 +39,6 @@ export class Game {
     this._InitCamera();
     this._InitPlayer();
 
-    this._InitCharacterController();
     this._InitRenderer();
     this._InitFramer();
 
@@ -66,8 +63,7 @@ export class Game {
     if (!this._camera) throw new Error('Cannot init framer, scene is not defined');
     if (!this._player) throw new Error('Cannot init framer, scene is not defined');
     if (!this._renderer) throw new Error('Cannot init framer, scene is not defined');
-    if (!this._controller) throw new Error('Cannot init framer, scene is not defined');
-    this._Framer = new Framer(this._scene, this._camera, this._player, this._renderer, this._controller);
+    this._Framer = new Framer(this._scene, this._camera, this._player, this._renderer);
   }
 
   private _InitLights() {
@@ -181,13 +177,5 @@ export class Game {
     } else {
       throw new Error('Cannot append to DOM, root element not found');
     }
-  }
-
-  private _InitCharacterController() {
-    if (!this._player) throw new Error('Cannot initiate character controller, player is not defined');
-    if (!this._camera) throw new Error('Cannot initiate character controller, camera is not defined');
-
-    this._controller = new CharacterController(this._player, this._camera._camera);
-    this._controller._input.turnOnKeyboardControls();
   }
 }

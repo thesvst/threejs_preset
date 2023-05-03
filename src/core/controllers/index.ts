@@ -1,1 +1,1 @@
-export * from './ThirdPerson/CharacterController';
+export * from './EntityController';
