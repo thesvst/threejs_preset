@@ -1,4 +1,4 @@
-import { AnimationActionNames, DanceState, IdleState, WalkState } from '@core/states';
+import { AnimationActionNames, DanceState, IdleState, WalkState } from '@core/motions/MotionStates';
 
 export const playerMotions = [
   { name: AnimationActionNames.IDLE, fileName: 'idle.fbx', manager: IdleState },

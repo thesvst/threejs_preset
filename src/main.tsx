@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import { AnimationActionNames } from '@core/states';
-
+import { AnimationActionNames } from '@core/motions/MotionStates';
 import { Game } from './Game';
 
 (async () => {

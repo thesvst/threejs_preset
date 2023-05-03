@@ -1,7 +1,12 @@
-import { AnimationActionNames, AnimationType } from '../../states/FiniteStateMachine/types';
 import { MotionManager } from '@core/motions';
 
 // TODO: Think how to resolve generic/hardcoded names issue
+
+export enum AnimationActionNames {
+  IDLE = 'IDLE',
+  WALK = 'WALK',
+  DANCE = 'DANCE',
+}
 
 export type MotionState =
   typeof IdleState |
@@ -24,7 +29,7 @@ export class IdleState<T, K> extends State<T, K> {
     return AnimationActionNames.IDLE;
   }
 
-  public Enter(prevState: InstanceType<AnimationType>) {
+  public Enter(prevState: InstanceType<MotionState>) {
     const idleAction = this._parent._target._animationsManager[AnimationActionNames.IDLE].action;
 
     if (prevState) {
@@ -54,7 +59,7 @@ export class WalkState<T, K> extends State<T, K> {
     return AnimationActionNames.WALK;
   }
 
-  public Enter(prevState: InstanceType<AnimationType>) {
+  public Enter(prevState: InstanceType<MotionState>) {
     const currentAction = this._parent._target._animationsManager[AnimationActionNames.WALK].action;
     const prevAction = this._parent._target._animationsManager[prevState.Name].action;
     if (prevState) {
@@ -82,7 +87,7 @@ export class DanceState<T, K> extends State<T, K> {
     return AnimationActionNames.DANCE;
   }
 
-  public Enter(prevState: InstanceType<AnimationType>) {}
+  public Enter(prevState: InstanceType<MotionState>) {}
 
   public Exit() {}
 

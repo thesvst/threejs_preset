@@ -1,8 +1,7 @@
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { AnimationAction, AnimationClip, AnimationMixer, Group, LoadingManager } from 'three';
 import { Logger } from '@core/logger';
-import { CharacterFSM } from '@core/states/FiniteStateMachine/CharacterFSM';
-import { Motion, MotionManager } from '@core/motions';
+import { Motion } from '@core/motions';
 // TODO: Move classes to separated folders
 // TODO: fix dep cycle
 // TODO: fix file accessibility methods (require proper path)
