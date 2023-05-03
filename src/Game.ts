@@ -33,20 +33,6 @@ export class Game<T> {
   _orbitControls: OrbitControls | null = null;
   _controller: CharacterController<T> | null = null;
 
-  private async _InitializeNPCs() {
-    [
-      new Vector3(-25, 0,50),
-      new Vector3(0, 0,50),
-      new Vector3(25, 0,50)
-    ].map(async (vector) => {
-      const npc = await NPC<T>();
-      this._NPC.push(npc)
-      npc._fbx.position.copy(vector)
-      npc._fbx.lookAt(0,0,0)
-      this._scene?.add(npc._fbx)
-    })
-  }
-
   public async Init() {
     this._player = await Player<T>();
     await this._InitScene();
@@ -171,6 +157,19 @@ export class Game<T> {
     this._scene.add(this._player._fbx);
     this._player._fbx.position.set(0, -0.02, 0);
     this._camera._camera.lookAt(this._player.Position.asVector3());
+  }
+  private async _InitializeNPCs() {
+    [
+      new Vector3(-25, 0,50),
+      new Vector3(0, 0,50),
+      new Vector3(25, 0,50)
+    ].map(async (vector) => {
+      const npc = await NPC<T>();
+      this._NPC.push(npc)
+      npc._fbx.position.copy(vector)
+      npc._fbx.lookAt(0,0,0)
+      this._scene?.add(npc._fbx)
+    })
   }
 
   private _AppendToDOMElement() {
