@@ -24,7 +24,6 @@ export const Player = async () => {
   await FBXLoaderManager.LoadAnimations(characterMotionsFolderPath, playerMotions);
   const Controller = new KeyboardControllerInput();
   Controller.turnOnKeyboardControls()
-
   const PlayerInstance = new PlayerClass(FBXLoaderManager, Controller);
 
   return PlayerInstance;

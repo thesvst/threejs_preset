@@ -21,7 +21,7 @@ import { NPC, NPCClass, Player, PlayerClass } from '@core/entities';
 // TODO: Replace all manually triggered errors by new logger class
 export class Game {
   _player: PlayerClass | null = null;
-  _NPC: NPCClass[] = [];
+  _NPCs: NPCClass[] = [];
   _Framer: Framer | null = null;
   _GUI: { camera: Gui; player: Gui } | null = null;
   _camera: ThirdPersonCamera | null = null;
@@ -63,7 +63,7 @@ export class Game {
     if (!this._camera) throw new Error('Cannot init framer, scene is not defined');
     if (!this._player) throw new Error('Cannot init framer, scene is not defined');
     if (!this._renderer) throw new Error('Cannot init framer, scene is not defined');
-    this._Framer = new Framer(this._scene, this._camera, this._player, this._renderer);
+    this._Framer = new Framer(this._scene, this._camera, this._player, this._renderer, this._NPCs);
   }
 
   private _InitLights() {
@@ -158,9 +158,9 @@ export class Game {
       new Vector3(-25, 0,50),
       new Vector3(0, 0,50),
       new Vector3(25, 0,50)
-    ].map(async (vector) => {
-      const npc = await NPC();
-      this._NPC.push(npc)
+    ].map(async (vector, index) => {
+      const npc = await NPC(`NPC-${index}`);
+      this._NPCs.push(npc)
       npc._target._fbx.position.copy(vector)
       npc._target._fbx.lookAt(0,0,0)
       this._scene?.add(npc._target._fbx)

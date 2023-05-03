@@ -39,8 +39,8 @@ export class KeyboardControllerInput extends EntityControllerInputClass {
   }
 
   public turnOffKeyboardControls() {
-    window.removeEventListener('keydown', this._onKeyDownListener);
-    window.removeEventListener('keyup', this._onKeyUpListener);
+    window.removeEventListener('keydown', this._onKeyDownListener.bind(this));
+    window.removeEventListener('keyup', this._onKeyUpListener.bind(this));
 
     Object.keys(this._actions).forEach((key) => {
       this._actions[this._actionsMap[key]] = false;

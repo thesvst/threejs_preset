@@ -5,14 +5,12 @@ enum ControllerActions {
 	RIGHT = 'RIGHT',
 }
 
-const actionsInitialState = {
-	[ControllerActions.FORWARD]: false,
-	[ControllerActions.BACKWARD]: false,
-	[ControllerActions.LEFT]: false,
-	[ControllerActions.RIGHT]: false,
-};
-
 export class EntityControllerInputClass {
-	_actions = actionsInitialState;
+	_actions = {
+		[ControllerActions.FORWARD]: false,
+		[ControllerActions.BACKWARD]: false,
+		[ControllerActions.LEFT]: false,
+		[ControllerActions.RIGHT]: false,
+	};
 }
 
