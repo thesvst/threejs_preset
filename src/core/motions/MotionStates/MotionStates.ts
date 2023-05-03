@@ -1,15 +1,22 @@
 import { AnimationActionNames, AnimationType } from '../../states/FiniteStateMachine/types';
-import { CharacterFSM } from '@core/states/FiniteStateMachine/CharacterFSM';
-// TODO: Abstract class for characterstate machine/npcstate machine
-class State {
-  _parent: CharacterFSM
+import { MotionManager } from '@core/motions';
+
+// TODO: Think how to resolve generic/hardcoded names issue
+
+export type MotionState =
+  typeof IdleState |
+  typeof WalkState |
+  typeof DanceState;
+
+class State<T, K> {
+  _parent: MotionManager<T, K>
 
   constructor(parent) {
     this._parent = parent;
   }
 }
 
-export class IdleState extends State {
+export class IdleState<T, K> extends State<T, K> {
   constructor(parent) {
     super(parent);
   }
@@ -18,10 +25,10 @@ export class IdleState extends State {
   }
 
   public Enter(prevState: InstanceType<AnimationType>) {
-    const idleAction = this._parent._animations[AnimationActionNames.IDLE].action;
+    const idleAction = this._parent._target._animationsManager[AnimationActionNames.IDLE].action;
 
     if (prevState) {
-      const prevAction = this._parent._animations[prevState.Name].action;
+      const prevAction = this._parent._target._animationsManager[prevState.Name].action;
       idleAction.time = 0.0;
       idleAction.enabled = true;
       idleAction.setEffectiveTimeScale(1.0);
@@ -42,14 +49,14 @@ export class IdleState extends State {
   }
 }
 
-export class WalkState extends State {
+export class WalkState<T, K> extends State<T, K> {
   get Name() {
     return AnimationActionNames.WALK;
   }
 
   public Enter(prevState: InstanceType<AnimationType>) {
-    const currentAction = this._parent._animations[AnimationActionNames.WALK].action;
-    const prevAction = this._parent._animations[prevState.Name].action;
+    const currentAction = this._parent._target._animationsManager[AnimationActionNames.WALK].action;
+    const prevAction = this._parent._target._animationsManager[prevState.Name].action;
     if (prevState) {
       currentAction.enabled = true;
       currentAction.time = 0.0;
@@ -58,7 +65,7 @@ export class WalkState extends State {
       currentAction.crossFadeFrom(prevAction, 0.5, true);
       currentAction.play();
     } else {
-      currentAction.play();
+      currentAction.reset().play();
     }
   }
 
@@ -70,7 +77,7 @@ export class WalkState extends State {
   }
 }
 
-export class DanceState extends State {
+export class DanceState<T, K> extends State<T, K> {
   get Name() {
     return AnimationActionNames.DANCE;
   }

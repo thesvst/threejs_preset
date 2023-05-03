@@ -18,25 +18,24 @@ import { ThirdPersonCamera } from '@core/cameras';
 import { CharacterController } from '@core/controllers';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { NPC, NPCClass, Player, PlayerClass } from '@core/entities';
-import { AnimationActionNames } from '@core/states';
 
 // TODO: Replace all manually triggered errors by new logger class
-export class Game<T> {
-  _player: PlayerClass<T> | null = null;
+export class Game<T, K> {
+  _player: PlayerClass<T, K> | null = null;
   _NPC: NPCClass<T>[] = [];
   _Framer: Framer<T> | null = null;
   _GUI: { camera: Gui; player: Gui } | null = null;
-  _camera: ThirdPersonCamera<T> | null = null;
+  _camera: ThirdPersonCamera<T, K> | null = null;
   _light: AmbientLight | null = null;
   _scene: Scene | null = null;
   _renderer: WebGLRenderer | null = null;
   _orbitControls: OrbitControls | null = null;
-  _controller: CharacterController<T> | null = null;
+  _controller: CharacterController<T, K> | null = null;
 
   public async Init() {
     this._player = await Player<T>();
     await this._InitScene();
-    await this._InitializeNPCs()
+    // await this._InitializeNPCs()
 
     this._InitLights();
     this._InitCamera();
@@ -80,7 +79,7 @@ export class Game<T> {
   }
 
   private _InitCamera() {
-    if (!this._player?._fbx) throw new Error('Cannot initiate camera, player is not defined');
+    if (!this._player?._target._fbx) throw new Error('Cannot initiate camera, player is not defined');
     this._camera = new ThirdPersonCamera(this._player);
   }
 
@@ -150,12 +149,12 @@ export class Game<T> {
   }
 
   private _InitPlayer() {
-    if (!this._player?._fbx) throw new Error('Cannot initialize player, player model is not defined');
+    if (!this._player?._target._fbx) throw new Error('Cannot initialize player, player model is not defined');
     if (!this._scene) throw new Error('Cannot initialize player, scene is not defined');
     if (!this._camera) throw new Error('Cannot initialize player, camera is not defined');
 
-    this._scene.add(this._player._fbx);
-    this._player._fbx.position.set(0, -0.02, 0);
+    this._scene.add(this._player._target._fbx);
+    this._player._target._fbx.position.set(0, -0.02, 0);
     this._camera._camera.lookAt(this._player.Position.asVector3());
   }
   private async _InitializeNPCs() {
@@ -166,9 +165,9 @@ export class Game<T> {
     ].map(async (vector) => {
       const npc = await NPC<T>();
       this._NPC.push(npc)
-      npc._fbx.position.copy(vector)
-      npc._fbx.lookAt(0,0,0)
-      this._scene?.add(npc._fbx)
+      npc._target._fbx.position.copy(vector)
+      npc._target._fbx.lookAt(0,0,0)
+      this._scene?.add(npc._target._fbx)
     })
   }
 

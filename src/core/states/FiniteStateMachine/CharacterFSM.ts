@@ -19,8 +19,7 @@ export class CharacterFSM extends FiniteStateMachine<AnimationActionNames, Anima
     this._animations = animations
   }
 
-  public _Init() {
-    console.log("A", this._animations)
+  private _Init() {
     this.AddState(AnimationActionNames.IDLE, IdleState);
     this.AddState(AnimationActionNames.WALK, WalkState);
     this.AddState(AnimationActionNames.DANCE, DanceState);

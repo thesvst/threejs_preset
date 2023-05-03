@@ -1,19 +1,19 @@
 import { PerspectiveCamera, Vector3 } from 'three';
 import { Entity } from '@core/entities';
 
-export class ThirdPersonCamera<T> {
+export class ThirdPersonCamera<T, K> {
   readonly _currentPosition = new Vector3(0,0,0);
   readonly _currentLookAt = new Vector3(0,0,0);
 
-  _target: Entity<T>;
+  _target: Entity<T, K>;
   _camera = new PerspectiveCamera();
 
-  constructor(target: Entity<T>) {
+  constructor(target: Entity<T, K>) {
     this._target = target;
   }
 
-  _CalculateIdealOffset() {
-    if (!this._target._fbx) throw new Error('Cannot calculate offset, fbx is missing');
+  private _CalculateIdealOffset() {
+    if (!this._target._target._fbx) throw new Error('Cannot calculate offset, fbx is missing');
     const idealOffset = new Vector3(-15, 20, -30);
 
     idealOffset.applyQuaternion(this._target.Quaternion.asQuaternion());
@@ -21,8 +21,8 @@ export class ThirdPersonCamera<T> {
     return idealOffset;
   }
 
-  _CalculateIdealLookAt() {
-    if (!this._target._fbx) throw new Error('Cannot calculate lookat, fbx is missing');
+  private _CalculateIdealLookAt() {
+    if (!this._target._target._fbx) throw new Error('Cannot calculate lookat, fbx is missing');
     const idealLookAt = new Vector3(0, 10, 50);
 
     idealLookAt.applyQuaternion(this._target.Quaternion.asQuaternion());
@@ -30,7 +30,7 @@ export class ThirdPersonCamera<T> {
     return idealLookAt;
   }
 
-  Update() {
+  public Update() {
     let idealOffset = this._CalculateIdealOffset();
     let idealLookAt = this._CalculateIdealLookAt();
 

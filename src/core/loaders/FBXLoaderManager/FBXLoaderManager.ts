@@ -32,20 +32,18 @@ export type FBXModel = { fbx: Group, mixer: AnimationMixer, manager: LoadingMana
 
 export class FBXLoaderManagerClass<T extends string, K> extends LoaderManagerClass {
   _fbx: Group;
-  _manager: LoadingManager;
-  _mixer: AnimationMixer;
-  _animations: {
+  _loadingManager: LoadingManager;
+  _animationMixer: AnimationMixer;
+  _animationsManager: {
     [key: string]: { clip: AnimationClip; action: AnimationAction }
   } = {};
-  _motionManager: MotionManager<T, K>;
+  _motions: Motion<T>[];
 
-  constructor(model: FBXModel, motions: MotionManager<T, K>) {
+  constructor(model: FBXModel) {
     super();
     this._fbx = model.fbx;
-    this._manager = model.manager;
-    this._mixer = model.mixer
-
-    this._motionManager = motions;
+    this._loadingManager = model.manager;
+    this._animationMixer = model.mixer
   }
 
   static async LoadModel(folderPath: string, fileName: string) {
@@ -60,27 +58,22 @@ export class FBXLoaderManagerClass<T extends string, K> extends LoaderManagerCla
     return { fbx, mixer, manager }
   }
 
-  private _AnimationOnLoad<T>(motion: Motion<T>, { animations} : Group) {
+  private _AnimationOnLoad<T>(motion: Motion<T>, { animations } : Group) {
     const clip = animations[0];
-    const action = this._mixer.clipAction(clip);
-    this._animations[motion.name] = { clip, action };
+    const action = this._animationMixer.clipAction(clip);
+    this._animationsManager[motion.name] = { clip, action };
   }
 
-  public async LoadAnimations() {
-    LoaderManagerClass._CheckIfFolderExists(this._motionManager._folderPath);
-    LoaderManagerClass._CheckIfFilesExists(this._motionManager._motions.map((motion) => motion.name));
+  public async LoadAnimations(folderPath, motions: Motion<T>[]) {
+    LoaderManagerClass._CheckIfFolderExists(folderPath);
+    LoaderManagerClass._CheckIfFilesExists(motions.map((motion) => motion.name));
+    this._motions = motions;
 
-    this._mixer = new AnimationMixer(this._fbx);
-    const loader = new FBXLoader(this._manager)
-    loader.setPath(this._motionManager._folderPath)
-    this._motionManager._motions.map((motion) => {
-      loader.load(motion.fileName, (animation) => {
-        this._AnimationOnLoad<T>(motion, animation)
-      })
-    })
-
-    this._manager.onLoad = () => {
-      // this._motionManager.SetState(this._motionManager._motions[0].name);
-    };
+    this._animationMixer = new AnimationMixer(this._fbx);
+    const loader = new FBXLoader(this._loadingManager)
+    loader.setPath(folderPath)
+    await Promise.all(motions.map(async (motion) => {
+      this._AnimationOnLoad<T>(motion, await loader.loadAsync(motion.fileName))
+    }))
   }
 }
