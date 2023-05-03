@@ -25,10 +25,15 @@ export class FiniteStateMachine {
       prevState.Exit();
     }
 
-    if (NewStateClass && prevState) {
+    if (NewStateClass) {
       const state = new NewStateClass(this);
       this._currentState = state;
-      this._currentState.Enter(prevState)
+
+      if (!prevState) {
+        this._currentState.Enter(state)
+      } else {
+        this._currentState.Enter(prevState)
+      }
     }
   }
 
