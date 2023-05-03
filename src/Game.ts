@@ -22,7 +22,7 @@ import { NPC, NPCClass, Player, PlayerClass } from '@core/entities';
 // TODO: Replace all manually triggered errors by new logger class
 export class Game<T, K> {
   _player: PlayerClass<T, K> | null = null;
-  _NPC: NPCClass<T>[] = [];
+  _NPC: NPCClass<T, K>[] = [];
   _Framer: Framer<T> | null = null;
   _GUI: { camera: Gui; player: Gui } | null = null;
   _camera: ThirdPersonCamera<T, K> | null = null;
@@ -35,7 +35,7 @@ export class Game<T, K> {
   public async Init() {
     this._player = await Player<T>();
     await this._InitScene();
-    // await this._InitializeNPCs()
+    await this._InitializeNPCs()
 
     this._InitLights();
     this._InitCamera();
