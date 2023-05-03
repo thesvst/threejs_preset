@@ -8,4 +8,3 @@ export const playerMotions = [
 export const characterFolderPath = 'src/assets/characters/';
 export const characterFileName = 'character.fbx';
 export const characterMotionsFolderPath = 'src/assets/animations/'
-

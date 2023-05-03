@@ -1,8 +1,9 @@
 import { FBXMotions, FBXLoaderManagerClass, FBXModel } from '@core/loaders';
 import { Vector3, Quaternion } from 'three';
+import { MotionManager } from '@core/motions';
 
 export class Entity<T> extends FBXLoaderManagerClass<T> {
-  constructor(model: FBXModel, motions: FBXMotions<T>) {
+  constructor(model: FBXModel, motions: MotionManager<T>) {
     super(model, motions);
   }
 
