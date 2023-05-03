@@ -1,9 +1,9 @@
-import { AnimationActionNames, DanceState, IdleState, WalkState } from '@core/motions/MotionStates';
+import { Motions, DanceState, IdleState, WalkState } from '@core/motions/MotionStates';
 
 export const playerMotions = [
-  { name: AnimationActionNames.IDLE, fileName: 'idle.fbx', manager: IdleState },
-  { name: AnimationActionNames.DANCE, fileName: 'dance.fbx', manager: DanceState },
-  { name: AnimationActionNames.WALK, fileName: 'walk.fbx', manager: WalkState }
+  { name: Motions.IDLE, fileName: 'idle.fbx', manager: IdleState },
+  { name: Motions.DANCE, fileName: 'dance.fbx', manager: DanceState },
+  { name: Motions.WALK, fileName: 'walk.fbx', manager: WalkState }
 ]
 export const characterFolderPath = 'src/assets/characters/';
 export const characterFileName = 'character.fbx';

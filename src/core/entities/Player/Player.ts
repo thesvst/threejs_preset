@@ -11,7 +11,7 @@ import {
 export class PlayerClass<T extends string, K> extends Entity<T, K> {
   _name = 'thesvst';
 
-  constructor(loaderManager: FBXLoaderManagerClass<T, K>) {
+  constructor(loaderManager: FBXLoaderManagerClass) {
     super(loaderManager);
     this._target._fbx.scale.set(0.1,0.1,0.1)
   }

@@ -1,9 +1,7 @@
-import { MotionManager } from '@core/motions';
 import { CharacterControllerInput } from '@core/controllers/ThirdPerson/CharacterControllerInput';
+import { FiniteStateMachine } from '@core/states';
 
-// TODO: Think how to resolve generic/hardcoded names issue
-
-export enum AnimationActionNames {
+export enum Motions {
   IDLE = 'IDLE',
   WALK = 'WALK',
   DANCE = 'DANCE',
@@ -14,27 +12,26 @@ export type MotionState =
   typeof WalkState |
   typeof DanceState;
 
-class State<T, K> {
-  _parent: MotionManager<T, K>
+class MotionStateClass {
+  _parent: FiniteStateMachine
+  _name: Motions;
 
-  constructor(parent: MotionManager<T, K>) {
+  constructor(parent: FiniteStateMachine, name: Motions) {
     this._parent = parent;
+    this._name = name;
   }
 }
 
-export class IdleState<T, K> extends State<T, K> {
-  constructor(parent: MotionManager<T, K>) {
-    super(parent);
-  }
-  get Name() {
-    return AnimationActionNames.IDLE;
+export class IdleState extends MotionStateClass {
+  constructor(parent: FiniteStateMachine) {
+    super(parent, Motions.IDLE);
   }
 
   public Enter(prevState: InstanceType<MotionState>) {
-    const idleAction = this._parent._target._animationsManager[AnimationActionNames.IDLE].action;
+    const idleAction = this._parent._target._animationsManager[this._name].action;
 
     if (prevState) {
-      const prevAction = this._parent._target._animationsManager[prevState.Name].action;
+      const prevAction = this._parent._target._animationsManager[prevState._name].action;
       idleAction.time = 0.0;
       idleAction.enabled = true;
       idleAction.setEffectiveTimeScale(1.0);
@@ -48,21 +45,21 @@ export class IdleState<T, K> extends State<T, K> {
 
   public Exit() {}
 
-  public Update(_: number, input: CharacterControllerInput) {
+  public Update(time: number, input: CharacterControllerInput) {
     if (input.actions.FORWARD || input.actions.BACKWARD) {
-     this._parent.SetState(AnimationActionNames.WALK)
+     this._parent.SetState(Motions.WALK)
     }
   }
 }
 
-export class WalkState<T, K> extends State<T, K> {
-  get Name() {
-    return AnimationActionNames.WALK;
+export class WalkState extends MotionStateClass {
+  constructor(parent: FiniteStateMachine) {
+    super(parent, Motions.WALK);
   }
 
   public Enter(prevState: InstanceType<MotionState>) {
-    const currentAction = this._parent._target._animationsManager[AnimationActionNames.WALK].action;
-    const prevAction = this._parent._target._animationsManager[prevState.Name].action;
+    const currentAction = this._parent._target._animationsManager[this._name].action;
+    const prevAction = this._parent._target._animationsManager[prevState._name].action;
     if (prevState) {
       currentAction.enabled = true;
       currentAction.time = 0.0;
@@ -79,18 +76,18 @@ export class WalkState<T, K> extends State<T, K> {
 
   public Update(_: number, input: CharacterControllerInput) {
     if (input.actions.FORWARD || input.actions.BACKWARD) return;
-    this._parent.SetState(AnimationActionNames.IDLE);
+    this._parent.SetState(Motions.IDLE);
   }
 }
 
-export class DanceState<T, K> extends State<T, K> {
-  get Name() {
-    return AnimationActionNames.DANCE;
+export class DanceState extends MotionStateClass {
+  constructor(parent: FiniteStateMachine) {
+    super(parent, Motions.DANCE);
   }
 
   public Enter(prevState: InstanceType<MotionState>) {}
 
   public Exit() {}
 
-  public Update() {}
+  public Update(time: number, input: CharacterControllerInput) {}
 }

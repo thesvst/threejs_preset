@@ -1,18 +1,19 @@
 import { FiniteStateMachine } from '@core/states';
 import { FBXLoaderManagerClass } from '@core/loaders';
-import { MotionState } from '@core/motions/MotionStates';
+import { Motions, MotionState } from '@core/motions/MotionStates';
+import { CharacterControllerInput } from '@core/controllers/ThirdPerson/CharacterControllerInput';
 
-export type Motion<T> = {
-  name: T,
+export type Motion = {
+  name: Motions,
   fileName: string,
-  manager: MotionState1;
+  manager: MotionState;
 }
 
-export class MotionManager<T, K> extends FiniteStateMachine<T, K> {
-  _target: FBXLoaderManagerClass<T, K>
+export class MotionManager extends FiniteStateMachine {
+  _target: FBXLoaderManagerClass
 
-  constructor(target: FBXLoaderManagerClass<T, K>) {
-    super();
+  constructor(target: FBXLoaderManagerClass) {
+    super(target);
     this._target = target;
 
     this._Init();
@@ -23,18 +24,20 @@ export class MotionManager<T, K> extends FiniteStateMachine<T, K> {
       this.AddMotionState(motion.name, motion.manager)
     })
 
-    this.SetMotionState(this._target._motions[0].name)
+    const defaultMotionName = this._target._motions[0].name
+    this.SetMotionState(defaultMotionName)
+    this._target._animationsManager[defaultMotionName].action.play()
   }
 
-  protected AddMotionState(name: T, type: K) {
+  protected AddMotionState(name: Motions, type: MotionState) {
     this.AddState(name, type)
   }
 
-  protected SetMotionState(name: T) {
+  protected SetMotionState(name: Motions) {
     this.SetState(name)
   }
 
-  protected UpdateMotionState(timeFromLastFrame: number, input) {
+  protected UpdateMotionState(timeFromLastFrame: number, input: CharacterControllerInput) {
     this.Update(timeFromLastFrame, input)
   }
 }

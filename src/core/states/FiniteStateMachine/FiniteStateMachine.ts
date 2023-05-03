@@ -1,31 +1,38 @@
-export class FiniteStateMachine<T extends string, K> {
-  _states: Record<T, K>;
-  _currentState: K | null = null;
+import { Motions, MotionState } from '@core/motions/MotionStates';
+import { CharacterControllerInput } from '@core/controllers/ThirdPerson/CharacterControllerInput';
+import { FBXLoaderManagerClass } from '@core/loaders';
 
-  constructor() {
-    this._states = {} as Record<T, K>;
+export class FiniteStateMachine {
+  _states: Partial<Record<Motions, MotionState>> = {};
+  _currentState: InstanceType<MotionState> | null;
+  _target: FBXLoaderManagerClass
+
+  constructor(target: FBXLoaderManagerClass) {
     this._currentState = null;
+    this._target = target;
   }
 
-  public AddState(name: T, type: K) {
+  public AddState(name: Motions, type: MotionState) {
     this._states[name] = type;
   }
 
-  public SetState(name: T) {
+  public SetState(name: Motions) {
     const prevState = this._currentState;
+    const NewStateClass = this._states[name];
 
     if (prevState) {
-      if (prevState.Name == name) return;
+      if (prevState._name == name) return;
       prevState.Exit();
     }
 
-    const state = new this._states[name](this);
-
-    this._currentState = state;
-    state.Enter(prevState);
+    if (NewStateClass && prevState) {
+      const state = new NewStateClass(this);
+      this._currentState = state;
+      this._currentState.Enter(prevState)
+    }
   }
 
-  public Update(timeFromLastFrame: number, input) {
+  public Update(timeFromLastFrame: number, input: CharacterControllerInput) {
     if (this._currentState) {
       this._currentState.Update(timeFromLastFrame, input);
     }
