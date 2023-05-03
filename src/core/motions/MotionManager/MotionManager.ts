@@ -1,10 +1,11 @@
-import { FiniteStateMachine, MotionState } from '@core/states';
+import { FiniteStateMachine } from '@core/states';
 import { FBXLoaderManagerClass } from '@core/loaders';
+import { MotionState } from '@core/motions/MotionStates';
 
 export type Motion<T> = {
   name: T,
   fileName: string,
-  manager: MotionState;
+  manager: MotionState1;
 }
 
 export class MotionManager<T, K> extends FiniteStateMachine<T, K> {

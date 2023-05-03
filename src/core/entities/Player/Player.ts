@@ -8,7 +8,7 @@ import {
   playerMotions,
 } from '../../../Game.consts';
 
-export class PlayerClass<T, K> extends Entity<T, K> {
+export class PlayerClass<T extends string, K> extends Entity<T, K> {
   _name = 'thesvst';
 
   constructor(loaderManager: FBXLoaderManagerClass<T, K>) {

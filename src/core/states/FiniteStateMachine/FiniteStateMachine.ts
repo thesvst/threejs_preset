@@ -1,6 +1,6 @@
-export class FiniteStateMachine<T, K> {
+export class FiniteStateMachine<T extends string, K> {
   _states: Record<T, K>;
-  _currentState: InstanceType<K> | null = null;
+  _currentState: K | null = null;
 
   constructor() {
     this._states = {} as Record<T, K>;
@@ -13,6 +13,7 @@ export class FiniteStateMachine<T, K> {
 
   public SetState(name: T) {
     const prevState = this._currentState;
+    console.log('curr', this._currentState)
 
     if (prevState) {
       if (prevState.Name == name) return;

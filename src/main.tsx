@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import { AnimationActionNames } from '@core/motions/MotionStates';
+import { AnimationActionNames, MotionState } from '@core/motions/MotionStates';
 import { Game } from './Game';
 
 (async () => {
-  const GameInstance = new Game<AnimationActionNames>();
+  const GameInstance = new Game<AnimationActionNames, MotionState>();
   await GameInstance.Init();
 })()
 

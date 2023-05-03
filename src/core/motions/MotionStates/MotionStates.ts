@@ -1,4 +1,5 @@
 import { MotionManager } from '@core/motions';
+import { CharacterControllerInput } from '@core/controllers/ThirdPerson/CharacterControllerInput';
 
 // TODO: Think how to resolve generic/hardcoded names issue
 
@@ -16,13 +17,13 @@ export type MotionState =
 class State<T, K> {
   _parent: MotionManager<T, K>
 
-  constructor(parent) {
+  constructor(parent: MotionManager<T, K>) {
     this._parent = parent;
   }
 }
 
 export class IdleState<T, K> extends State<T, K> {
-  constructor(parent) {
+  constructor(parent: MotionManager<T, K>) {
     super(parent);
   }
   get Name() {
@@ -47,8 +48,8 @@ export class IdleState<T, K> extends State<T, K> {
 
   public Exit() {}
 
-  public Update(_, input) {
-    if (input._actions.FORWARD || input._actions.BACKWARD) {
+  public Update(_: number, input: CharacterControllerInput) {
+    if (input.actions.FORWARD || input.actions.BACKWARD) {
      this._parent.SetState(AnimationActionNames.WALK)
     }
   }
@@ -76,8 +77,8 @@ export class WalkState<T, K> extends State<T, K> {
 
   public Exit() {}
 
-  public Update(_, input) {
-    if (input._actions.FORWARD || input._actions.BACKWARD) return;
+  public Update(_: number, input: CharacterControllerInput) {
+    if (input.actions.FORWARD || input.actions.BACKWARD) return;
     this._parent.SetState(AnimationActionNames.IDLE);
   }
 }

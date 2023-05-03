@@ -20,7 +20,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { NPC, NPCClass, Player, PlayerClass } from '@core/entities';
 
 // TODO: Replace all manually triggered errors by new logger class
-export class Game<T, K> {
+export class Game<T extends string, K> {
   _player: PlayerClass<T, K> | null = null;
   _NPC: NPCClass<T, K>[] = [];
   _Framer: Framer<T> | null = null;
@@ -33,7 +33,7 @@ export class Game<T, K> {
   _controller: CharacterController<T, K> | null = null;
 
   public async Init() {
-    this._player = await Player<T>();
+    this._player = await Player<T, K>();
     await this._InitScene();
     await this._InitializeNPCs()
 
@@ -163,7 +163,7 @@ export class Game<T, K> {
       new Vector3(0, 0,50),
       new Vector3(25, 0,50)
     ].map(async (vector) => {
-      const npc = await NPC<T>();
+      const npc = await NPC<T, K>();
       this._NPC.push(npc)
       npc._target._fbx.position.copy(vector)
       npc._target._fbx.lookAt(0,0,0)

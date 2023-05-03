@@ -22,7 +22,7 @@ const actionsInitialState = {
 };
 
 export class CharacterControllerInput {
-  private readonly _actionsMap: ActionsMap = actionsMapInitialState;
+  readonly _actionsMap: ActionsMap = actionsMapInitialState;
   private _actions = actionsInitialState;
 
   get actions() {
