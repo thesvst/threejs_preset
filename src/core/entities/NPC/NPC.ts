@@ -19,9 +19,9 @@ export class NPCClass<T> extends Entity<T> {
   }
 }
 
-export const NPC = async () => {
+export const NPC = async <T>() => {
   const FBXModelInstance = await FBXLoaderManagerClass.LoadModel(characterFolderPath, characterFileName);
-  const FBXMotionsInstance =  new FBXMotions<AnimationActionNames>(characterMotionsFolderPath, playerMotions);
+  const FBXMotionsInstance =  new FBXMotions<T>(characterMotionsFolderPath, playerMotions);
   const PlayerInstance = new NPCClass(FBXModelInstance, FBXMotionsInstance)
   await PlayerInstance.LoadAnimations();
 

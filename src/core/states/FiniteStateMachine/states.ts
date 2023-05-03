@@ -1,6 +1,6 @@
 import { AnimationActionNames, AnimationType } from './types';
 import { CharacterFSM } from '@core/states/FiniteStateMachine/CharacterFSM';
-
+// TODO: Abstract class for characterstate machine/npcstate machine
 class State {
   _parent: CharacterFSM
 

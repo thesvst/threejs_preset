@@ -21,7 +21,6 @@ import { NPC, NPCClass, Player, PlayerClass } from '@core/entities';
 import { AnimationActionNames } from '@core/states';
 
 // TODO: Replace all manually triggered errors by new logger class
-
 export class Game<T> {
   _player: PlayerClass<T> | null = null;
   _NPC: NPCClass<T>[] = [];
@@ -40,7 +39,7 @@ export class Game<T> {
       new Vector3(0, 0,50),
       new Vector3(25, 0,50)
     ].map(async (vector) => {
-      const npc = await NPC<AnimationActionNames>();
+      const npc = await NPC<T>();
       this._NPC.push(npc)
       npc._fbx.position.copy(vector)
       npc._fbx.lookAt(0,0,0)
@@ -49,7 +48,7 @@ export class Game<T> {
   }
 
   public async Init() {
-    this._player = await Player<AnimationActionNames>();
+    this._player = await Player<T>();
     await this._InitScene();
     await this._InitializeNPCs()
 
